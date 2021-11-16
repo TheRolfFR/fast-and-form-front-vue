@@ -1,4 +1,7 @@
 // pour faire tourner la machine
+
+// npm install
+// npm install vue-form-generator
 // npm run serve
 
 import Vue from "vue";
