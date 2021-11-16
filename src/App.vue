@@ -1,13 +1,34 @@
 <template>
   <div id="app">
-    <div id="nav">
+    
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/testdb">Test DB</router-link>
     </div>
-    <router-view />
+    <router-view /> -->
+
+    <TestFormGenerator />
+
   </div>
 </template>
+
+
+
+<script>
+import TestFormGenerator from "./components/TestFormGenerator.vue";
+export default {
+  name: "App",
+  components: {
+    TestFormGenerator
+  },
+};
+</script>
+
+
+
+
+
 
 <style lang="scss">
 #app {
