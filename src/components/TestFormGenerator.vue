@@ -1,21 +1,24 @@
 <template>
   <div>
     <!-- ********************************************* -->
-    <b-container fluid>
-      <vue-form-generator
-        :schema="schema"
-        :schema1="schema"
-        :model="model"
-        :options="formOptions"
-      ></vue-form-generator>
-      <b-button @click="submit">submit</b-button>
-    </b-container>
-  
-    <div>
-      <b-table striped hover :items="dataForm"></b-table>
-    </div>
-
-
+    <b-card no-body>
+      <b-tabs card>
+        <b-tab title="form" active
+          ><b-container fluid>
+            <vue-form-generator
+              :schema="schema"
+              :schema1="schema"
+              :model="model"
+              :options="formOptions"
+            ></vue-form-generator>
+            <b-button @click="submit">submit</b-button>
+          </b-container></b-tab
+        >
+        <b-tab title="data list"
+          ><b-table striped hover :items="dataForm"></b-table
+        ></b-tab>
+      </b-tabs>
+    </b-card>
   </div>
 </template>
 
