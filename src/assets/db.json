@@ -1,18 +1,25 @@
 {
   "Form": [
     {
-      "username": "",
-      "email": "hachichou.hassan@gmail.com",
-      "color": "",
-      "animal": "",
+      "username": "toto",
+      "email": "toto@gmail.com",
+      "color": "Green",
+      "animal": "cat",
       "id": 1
     },
     {
-      "username": "",
-      "email": "",
-      "color": "",
-      "animal": "",
+      "username": "tata",
+      "email": "tata@gmail.com",
+      "color": "Blue",
+      "animal": "dog",
       "id": 2
+    },
+    {
+      "username": "titi",
+      "email": "titi@gmail.com",
+      "color": "Red",
+      "animal": "hamster",
+      "id": 3
     }
   ]
 }

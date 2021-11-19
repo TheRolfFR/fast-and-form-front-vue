@@ -1,55 +1,27 @@
 <template>
-  <div >
+  <div>
     <!-- ********************************************* -->
     <b-container fluid>
-    <vue-form-generator
-      :schema="schema"
-      :schema1="schema"
-      :model="model"
-      :options="formOptions"
-    ></vue-form-generator>
-    <b-button @click="submit">submit</b-button>
+      <vue-form-generator
+        :schema="schema"
+        :schema1="schema"
+        :model="model"
+        :options="formOptions"
+      ></vue-form-generator>
+      <b-button @click="submit">submit</b-button>
     </b-container>
-    <!-- ********************************************* -->
+  
+    <div>
+      <b-table striped hover :items="dataForm"></b-table>
+    </div>
 
-    <!-- <p> resultat</p>
-    {{ model.username }} -->
-    <p v-for="todo of dataForm" :key="todo.id">
-      <b> username: </b> {{ todo.username }} <b> email: </b>{{ todo.email }}
-      <!-- modifer le json -->
-      <br>
-      <label for="name">update username :</label>
-      <input type="text" id="name" name="name" />
-      <b-button @click="update(todo.id)">update</b-button>
-    
-    </p>
 
-    <!-- affichage des entetes -->
-    <!-- <p v-for="head of headDataForm" :key="head.id">
-      {{ head }}
-    </p> -->
-
-    <!-- https://codesandbox.io/s/amazing-wood-u7i0v?file=/index.html:119-179 -->
-    <!-- <table>
-      <thead  v-for="head of headDataForm" :key="head.id">
-        <tr >
-          <th>{{ head }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="todo of dataForm" :key="todo.id">
-          <td>
-            {{ todo }}
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
 </template>
 
 <script>
 import Vue from "vue";
-import "@/assets/style.css";
+// import "@/assets/style.css";
 import VueFormGenerator from "vue-form-generator";
 import "vue-form-generator/dist/vfg.css";
 import axios from "axios";
@@ -131,13 +103,12 @@ export default {
       const res = await axios.get(baseURL);
 
       this.dataForm = res.data;
-      
+
       // recuperation des noms d'objet 'head'
       this.headDataForm = Object.keys(this.model);
       // console.log("headDataForm");
       // console.log(this.headDataForm);
-   
-   } catch (e) {
+    } catch (e) {
       console.error(e);
     }
   },
@@ -150,6 +121,9 @@ export default {
         // console.log("this.dataForm");
         // console.log(this.dataForm);
         this.model.username = "";
+        this.model.email = "";
+        this.model.color = "";
+        this.model.animal = "";
       } catch (e) {
         console.error(e);
       }
@@ -158,19 +132,15 @@ export default {
     // modifie les données dans le json grace a leur ID
     async update(id) {
       try {
-        
         await axios.patch(`${baseURL}/${id}`, {
-          // vide animal 
-          animal: "",
           // update de username
           username: document.getElementById("name").value,
         });
-      const res = await axios.get(baseURL);
-      this.dataForm = res.data;
+        const res = await axios.get(baseURL);
+        this.dataForm = res.data;
       } catch (e) {
         console.error(e);
       }
-     
     },
   },
 };
