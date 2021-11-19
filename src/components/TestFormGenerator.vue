@@ -17,6 +17,18 @@
         <b-tab title="data list"
           ><b-table striped hover :items="dataForm"></b-table
         ></b-tab>
+
+        <b-tab title="update">
+          <label > ID number of the field you want to modify: </label>
+          <br>
+          <input type="number" id="number" name="number" />
+          <br>
+          <label > new username: </label>
+          <br>
+          <input type="text" id="name" name="name" />
+          <br>
+          <b-button @click="update">update</b-button>
+        </b-tab>
       </b-tabs>
     </b-card>
   </div>
@@ -133,9 +145,9 @@ export default {
     },
 
     // modifie les données dans le json grace a leur ID
-    async update(id) {
+    async update() {
       try {
-        await axios.patch(`${baseURL}/${id}`, {
+        await axios.patch(`${baseURL}/${document.getElementById("number").value}`, {
           // update de username
           username: document.getElementById("name").value,
         });
