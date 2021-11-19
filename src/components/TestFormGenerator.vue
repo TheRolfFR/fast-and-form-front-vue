@@ -17,6 +17,8 @@
     <p v-for="todo of dataForm" :key="todo.id">
       <b> username: </b> {{ todo.username }} <b> email: </b>{{ todo.email }}
       <!-- modifer le json -->
+      <br>
+      <label for="name">update username :</label>
       <input type="text" id="name" name="name" />
       <b-button @click="update(todo.id)">update</b-button>
     
@@ -29,23 +31,15 @@
 
     <!-- https://codesandbox.io/s/amazing-wood-u7i0v?file=/index.html:119-179 -->
     <!-- <table>
-      <thead>
-        <tr>
-          <th>username</th>
-          <th>email</th>
+      <thead  v-for="head of headDataForm" :key="head.id">
+        <tr >
+          <th>{{ head }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="todo of dataForm" :key="todo.id">
           <td>
-            {{ todo.username }}
-          </td>
-          <td>
-            {{ todo.email }}
-          </td>
-          <td>
-            <input type="text" id="name" name="name" />
-            <b-button @click="doneTodo(todo.id)">doneTodo</b-button>
+            {{ todo }}
           </td>
         </tr>
       </tbody>
