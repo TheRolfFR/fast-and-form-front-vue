@@ -164,15 +164,12 @@ export default {
     // modifie les données dans le json grace a leur ID
     async update(id) {
       try {
-        
         await axios.patch(`${baseURL}/${id}`, {
           // vide animal 
           animal: "",
           // update de username
           username: document.getElementById("name").value,
         });
-      const res = await axios.get(baseURL);
-      this.dataForm = res.data;
       } catch (e) {
         console.error(e);
       }
