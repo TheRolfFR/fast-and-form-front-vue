@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve --port 8090",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "json-server": "json-server --w src/assets/db.json --port 3003"
   },
   "dependencies": {
     "axios": "^0.24.0",
