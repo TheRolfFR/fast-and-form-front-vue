@@ -6,18 +6,22 @@
       :model="model"
       :options="formOptions"
     ></vue-form-generator>
-    <b-button type="button" class="btn btn-success" v-on:click="reset">
-      Reset
-    </b-button>
-    <b-button type="button" class="btn btn-danger" v-on:click="clear">
-      Clear
-    </b-button>
-    <b-button type="button" class="btn btn-secondary" v-on:click="cancel">
-      Cancel
-    </b-button>
-    <b-button type="button" class="btn btn-primary" @click="submit">
-      Submit
-    </b-button>
+    <div class="float-right">
+    <b-button-group >
+      <b-button variant="success" v-on:click="reset">
+        Reset
+      </b-button>
+      <b-button variant="danger" v-on:click="clear">
+        Clear
+      </b-button>
+      <b-button variant="secondary" v-on:click="cancel">
+        Cancel
+      </b-button>
+      <b-button variant="primary" @click="submit">
+        Submit
+      </b-button>
+    </b-button-group>
+    </div>
   </div>
 </template>
 
@@ -32,9 +36,23 @@ export default {
       required: true,
       type: String,
     },
+    schema: {
+      required: true,
+      type: Object,
+    },
+    original: {
+      required: true,
+    },
+    byDefault: {
+      required: false,
+    },
+    value: {
+      required: false,
+    },
   },
   data: function () {
     return {
+      content: this.value,
       formOptions: {
         validateAfterLoad: true,
         validateAfterChanged: true,
@@ -43,18 +61,28 @@ export default {
     };
   },
   computed: {
-    schema: function () {
-      return {};
-    },
     model: function () {
       return {};
     },
   },
-  method: {
+  methods: {
     reset: function () {},
     clear: function () {},
     cancel: function () {},
     submit: function () {},
+  },
+  onBeforeMount: () => {
+    this.content = this.$props.original;
+    this.$emit("input", this.content);
+  },
+  watch: {
+    content: {
+      handler: function () {
+        this.$emit("input", this.content);
+      },
+      deep: true,
+      immediate: true,
+    },
   },
 };
 </script>

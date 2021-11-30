@@ -2,7 +2,9 @@
   <div id="app">
     <div id="nav">
       <router-link to="/testdb">Test DB</router-link> |
-      <router-link to="/list">Liste</router-link>
+      <router-link to="/list">Liste</router-link> |
+      <router-link to="/form/users">Users</router-link> |
+      <router-link to="/form/contributions">Contributions </router-link>
     </div>
     <router-view />
 
