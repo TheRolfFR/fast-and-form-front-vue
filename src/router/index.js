@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import TestDB from "../views/TestDB.vue";
 import AppList from "../views/AppList.vue";
 import AppForm from "../views/AppForm.vue";
+import TestFormGenerator from "../components/TestFormGenerator.vue";
 import BootstrapVue from "bootstrap-vue";
 
 Vue.use(VueRouter);
@@ -31,6 +32,11 @@ const routes = [
     path: "/list",
     name: "list",
     component: AppList,
+  },
+  {
+    path: "/testformgenerator",
+    name: "TestFormGenerator",
+    component: TestFormGenerator,
   },
 ];
 
