@@ -1,3 +1,8 @@
+import { BVToastPlugin } from "bootstrap-vue";
+import Vue from "vue";
+
+Vue.use(BVToastPlugin);
+
 export default {
   methods: {
     /**
@@ -9,10 +14,10 @@ export default {
     showToast: function (description, title, variant) {
       return this.$bvToast.toast(description, {
         title: title,
-        autoHideDelay: 4000,
-        appendToast: true,
+        noAutoHide: true,
+        appendToast: false,
         variant: variant,
-        toaster: "b-toaster-top-left",
+        toaster: "b-toaster-bottom-right",
       });
     },
 
