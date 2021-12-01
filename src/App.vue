@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       logo: require("./assets/logo.png"),
-      dark: localStorage.getItem(THEME_KEY, false),
+      dark: localStorage.getItem(THEME_KEY, false) === "true",
     };
   },
   components: {
@@ -59,8 +59,8 @@ export default {
     BIconMoon,
   },
   watch: {
-    dark: function () {
-      localStorage.setItem(THEME_KEY, this.dark);
+    dark: function (currentValue) {
+      localStorage.setItem(THEME_KEY, currentValue);
     },
   },
 };
