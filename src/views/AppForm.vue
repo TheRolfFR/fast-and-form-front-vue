@@ -69,10 +69,12 @@ export default {
               required: true,
             },
             {
-              type: "select",
+              type: "selectEx",
               label: "User type",
               model: "type",
+              multiSelect: true,
               required: true,
+              noneSelectedText: "Choose one ore more type",
               values: [
                 "Administrator",
                 "Donator",
@@ -83,6 +85,8 @@ export default {
                 "Developer",
                 "Translator",
               ],
+              min: 2,
+              validator: VueFormGenerator.validators.array,
             },
           ],
         };
@@ -90,27 +94,18 @@ export default {
         return {
           fields: [
             {
-              type: "input",
-              inputType: "number",
-              label: "Id",
-              model: "id",
-              required: true,
-              validator: VueFormGenerator.validators.integer,
-              disabled: true,
-            },
-            {
               type: "select",
               label: "Res",
               model: "res",
               required: true,
               values: ["c32", "c64"],
+              min: 1,
             },
             {
               type: "DatePicker",
               label: "Contribution date",
               placeholder: "Date of the contribution submission",
               model: "date",
-              validator: VueFormGenerator.validators.date,
               required: true,
               format: "timestamp",
             },
@@ -137,6 +132,7 @@ export default {
                 "230151512456",
                 "230151512457",
               ],
+              min: 1,
             },
           ],
         };

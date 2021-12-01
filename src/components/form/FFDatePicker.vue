@@ -9,6 +9,7 @@
     :placeholder="schema.placeholder"
     :locale="schema.locale || 'en'"
     :dark="schema.dark || false"
+    :state="errors.length == 0 ? null : false"
     :date-disabled-fn="dateDisabled"
   />
 </template>
