@@ -26,15 +26,12 @@ export default {
   },
   mounted: function () {
     this.rawModel = this.$props.value;
-    console.log(this.value);
   },
   watch: {
     value: function (currentValue) {
-      console.log(currentValue);
       this.rawModel = new Date(currentValue);
     },
     outModel: function (currentValue) {
-      console.log(currentValue);
       this.value = currentValue;
     },
   },
