@@ -23,7 +23,6 @@ export default {
           username: "",
           type: ["Contributor"],
         },
-        model: {},
       },
       contributions: {
         original: {},
@@ -35,6 +34,7 @@ export default {
           contributors: [],
         },
       },
+      model: {},
     };
   },
   components: {
@@ -49,9 +49,6 @@ export default {
     },
     byDefault: function () {
       return this.entityData.default;
-    },
-    model: function () {
-      return this.entityData.model;
     },
     entityData: function () {
       return this.$data[this.entityName];
@@ -69,11 +66,13 @@ export default {
               inputType: "text",
               label: "Username",
               model: "username",
+              required: true,
             },
             {
               type: "select",
               label: "User type",
               model: "type",
+              required: true,
               values: [
                 "Administrator",
                 "Donator",
@@ -95,6 +94,7 @@ export default {
               inputType: "number",
               label: "Id",
               model: "id",
+              required: true,
               validator: VueFormGenerator.validators.integer,
               disabled: true,
             },
@@ -102,29 +102,31 @@ export default {
               type: "select",
               label: "Res",
               model: "res",
+              required: true,
               values: ["c32", "c64"],
             },
             {
-              type: "pikaday",
-              label: "Simple datepicker",
-              placeholder: "User's birth of date",
+              type: "DatePicker",
+              label: "Contribution date",
+              placeholder: "Date of the contribution submission",
               model: "date",
               validator: VueFormGenerator.validators.date,
-              pikadayOptions: {
-                position: "top left",
-              },
+              required: true,
+              format: "timestamp",
             },
             {
               type: "input",
               inputType: "number",
               label: "Texture ID",
               model: "TextureID",
+              required: true,
               validator: VueFormGenerator.validators.integer,
             },
             {
               type: "Checklist",
               label: "Contributors",
               model: "contributors",
+              required: true,
               listBox: true,
               values: [
                 "230151512451",

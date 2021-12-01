@@ -1,0 +1,104 @@
+<template>
+  <b-form-datepicker
+    v-model="rawModel"
+    :disabled="disabled"
+    today-button
+    value-as-date
+    :min="schema.min"
+    :max="schema.max"
+    :placeholder="schema.placeholder"
+    :locale="schema.locale || 'en'"
+    :dark="schema.dark || false"
+    :date-disabled-fn="dateDisabled"
+  />
+</template>
+
+<script>
+import { abstractField } from "vue-form-generator";
+
+export default {
+  name: "ff-date-picker",
+  mixins: [abstractField],
+  data: function () {
+    return {
+      rawModel: new Date(this.value),
+    };
+  },
+  mounted: function () {
+    this.rawModel = this.$props.value;
+    console.log(this.value);
+  },
+  watch: {
+    value: function (currentValue) {
+      console.log(currentValue);
+      this.rawModel = new Date(currentValue);
+    },
+    outModel: function (currentValue) {
+      console.log(currentValue);
+      this.value = currentValue;
+    },
+  },
+  computed: {
+    outModel: function () {
+      if (!this.schema.format) return this.rawModel;
+
+      const parsed_date = new Date(this.rawModel);
+      // number of milliseconds since January 1st, 1970 at UTC
+      if (this.schema.format === "timestamp") return parsed_date.getTime();
+      // number of seconds since January 1st, 1970 at UTC
+      if (this.schema.format === "unix") return parsed_date.getTime() / 1000;
+      // Coordinated Universal Time string
+      else if (this.schema.format === "utc") return parsed_date.toUTCString();
+      // ISO 8601 extended format : YYYY-MM-DDTHH:mm:ss.sssZ
+      else if (this.schema.format === "iso") return parsed_date.toISOString();
+
+      return this.rawModel;
+    },
+  },
+  methods: {
+    /**
+     * @param {String} _yyyymmdd date as YYYY-MM-DD format string
+     * @param {Date} actualDate date as Date instance
+     */
+    dateDisabled(_yyyymmdd, actualDate) {
+      // not disabled is no option
+      if (!this.schema.dateDisabled) return false;
+
+      // recover to array
+      let date_disabled = this.schema.dateDisabled;
+      if (!Array.isArray(date_disabled)) date_disabled = [date_disabled];
+
+      // we are on a logic AND so we end
+      let uncorrect_date = false;
+      let el,
+        dateToCheck,
+        var_type,
+        i = 0;
+      while (i < date_disabled.length && !uncorrect_date) {
+        el = date_disabled[i];
+        var_type = typeof el;
+
+        if (var_type === "string" || var_type === "number") {
+          dateToCheck = new Date(el);
+
+          if (dateToCheck instanceof Date && !!dateToCheck.getDate()) {
+            uncorrect_date =
+              dateToCheck.getDate() === actualDate.getDate() &&
+              dateToCheck.getMonth() === actualDate.getMonth() &&
+              dateToCheck.getFullYear() === actualDate.getFullYear();
+          } else {
+            console.warn("Failed to parse date", el);
+          }
+        } else if (var_type === "function") {
+          uncorrect_date = el();
+        } else if (var_type === "boolean") {
+          uncorrect_date = el;
+        }
+        i++;
+      }
+
+      return uncorrect_date;
+    },
+  },
+};
+</script>

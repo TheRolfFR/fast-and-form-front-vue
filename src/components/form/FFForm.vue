@@ -7,26 +7,22 @@
       :options="formOptions"
     ></vue-form-generator>
     <div class="float-right">
-    <b-button-group >
-      <b-button variant="success" v-on:click="reset">
-        Reset
-      </b-button>
-      <b-button variant="danger" v-on:click="clear">
-        Clear
-      </b-button>
-      <b-button variant="secondary" v-on:click="cancel">
-        Cancel
-      </b-button>
-      <b-button variant="primary" @click="submit">
-        Submit
-      </b-button>
-    </b-button-group>
+      <b-button-group>
+        <b-button variant="success" v-on:click="reset"> Reset </b-button>
+        <b-button variant="danger" v-on:click="clear"> Clear </b-button>
+        <b-button variant="secondary" v-on:click="cancel"> Cancel </b-button>
+        <b-button variant="primary" @click="submit"> Submit </b-button>
+      </b-button-group>
     </div>
   </div>
 </template>
 
 <script>
 import ToastMixin from "../../mixins/ToastMixin"; // mixin to show toasts for error for example
+
+import Vue from "vue";
+import FFDatePicker from "./FFDatePicker.vue";
+Vue.component("fieldDatePicker", FFDatePicker);
 
 export default {
   mixins: [ToastMixin],
