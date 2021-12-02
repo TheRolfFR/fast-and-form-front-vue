@@ -122,7 +122,7 @@ export default {
       // recuperation des noms d'objet 'head'
       this.headDataForm = Object.keys(this.model);
       // console.log("headDataForm");
-      // console.log(this.headDataForm);
+      alert(this.headDataForm);
     } catch (e) {
       console.error(e);
     }

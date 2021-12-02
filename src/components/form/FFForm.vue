@@ -1,9 +1,10 @@
+/* eslint-disable */
 <template>
   <div>
     <h2 v-text="title"></h2>
     <vue-form-generator
       :schema="finalSchema"
-      :model="model"
+      :model="content"
       :options="formOptions"
       @validated="onValidated"
     ></vue-form-generator>
@@ -43,6 +44,15 @@
         Submit
       </b-button>
     </div>
+    <div class="mt-3">
+      <b-alert v-model="showAlert" :variant="bVarriant" dismissible>
+        {{ alertMessage }}
+      </b-alert>
+    </div>
+    <div class="mt-3">
+      <button v-on:click="getDataList">Get Data</button>
+      <div>{{ dataList }}</div>
+    </div>
   </div>
 </template>
 
@@ -53,6 +63,7 @@ import Vue from "vue";
 import FFDatePicker from "./FFDatePicker.vue";
 import { validators } from "vue-form-generator";
 Vue.component("fieldDatePicker", FFDatePicker);
+import axios from "axios";
 
 export default {
   mixins: [ToastMixin],
@@ -73,12 +84,20 @@ export default {
       required: false,
     },
     value: {
-      required: false,
+      required: true,
+    },
+    baseURL: {
+      required: true,
     },
   },
   data: function () {
     return {
+      dataList: [],
+
       content: this.value,
+
+      url: this.baseURL,
+
       formOptions: {
         validateAfterLoad: true,
         validateAfterChanged: true,
@@ -86,11 +105,27 @@ export default {
       },
       isValid: false,
       errors: [],
+      showAlert: false,
+      bVarriant: "primary",
+      alertMessage: "",
     };
+  },
+  async created() {
+    // try {
+    //   // const res = await axios.get(baseURL);
+    //   // this.dataForm = res.data;
+    //   // recuperation des noms d'objet 'head'
+    //   this.headDataForm = Object.keys(this.content);
+    //   // console.log("headDataForm");
+    //   alert("coucou " + this.headDataForm);
+    // } catch (e) {
+    //   console.error(e);
+    //   //alert("error");
+    // }
   },
   computed: {
     model: function () {
-      return {};
+      return 1;
     },
     finalSchema: function () {
       let result = this.schema;
@@ -115,10 +150,37 @@ export default {
     },
   },
   methods: {
-    reset: function () {},
-    clear: function () {},
-    cancel: function () {},
-    submit: function () {},
+    reset: function () {
+      let txt;
+      for (let x in this.content) {
+        txt += x + " :   " + this.content[x] + "\n";
+        this.content[x] = this.byDefault[x];
+      }
+      this.showAlert = true;
+      this.alertMessage =
+        "Reset : Les valeurs du formulaire ont réinitialiser. Anciennes valeurs : [" +
+        txt +
+        "]";
+      this.bVarriant = "warning";
+    },
+    clear: function () {
+      let txt;
+      for (let x in this.content) {
+        txt += x + " :   " + this.content[x] + "\n";
+        this.content[x] = "";
+      }
+      this.showAlert = true;
+      this.alertMessage =
+        "Clear : Le formulaire a été vidé. Anciennes valeurs : [" + txt + "]";
+      this.bVarriant = "danger";
+      this.isValid = false;
+    },
+
+    cancel: function () {
+      this.showAlert = true;
+      this.alertMessage = "Cancel : Le formulaire ne sera pas pris en compte";
+      this.bVarriant = "dark";
+    },
     onValidated: function (isValid, errors) {
       this.isValid = isValid;
       this.errors = errors;
@@ -146,10 +208,35 @@ export default {
       }
       return field;
     },
+    async submit() {
+      try {
+        const res = await axios.post(this.url, this.content);
+        this.dataForm = [...this.dataForm, res.data];
+      } catch (e) {
+        console.error(e);
+      }
+      let txt;
+      for (let x in this.content) {
+        txt += x + " :   " + this.content[x] + "\n";
+      }
+      this.showAlert = true;
+      this.clear();
+      this.alertMessage =
+        "Submit : Le formulaire est enregistré. Valeurs : [" + txt + "]";
+      this.bVarriant = "primary";
+    },
+    async getDataList() {
+      const res = await axios
+        .get(this.url)
+        .then((response) => (this.dataList = response.data));
+      this.dataForm = res.data;
+    },
   },
   onBeforeMount: () => {
     this.content = this.$props.original;
     this.$emit("input", this.content);
+    this.url = this.$props.baseURL;
+    this.getDataList();
   },
   watch: {
     content: {
@@ -158,6 +245,16 @@ export default {
       },
       deep: true,
       immediate: true,
+    },
+    title: {
+      handler: function () {
+        //changement de page de formulaire
+        this.content = this.$props.original;
+        this.url = this.$props.baseURL;
+        this.clear();
+        this.getDataList();
+        this.showAlert = false;
+      },
     },
   },
 };

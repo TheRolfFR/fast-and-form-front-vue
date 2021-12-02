@@ -1,10 +1,12 @@
+/* eslint-disable */
 <template>
   <FFForm
     :title="'edit/add ' + $route.params.entity"
     :schema="correctSchema"
     :byDefault="byDefault"
     :original="original"
-    v-model="model"
+    :value="value"
+    :baseURL="baseURL"
   />
 </template>
 
@@ -17,38 +19,53 @@ export default {
   data: function () {
     return {
       users: {
-        original: {},
-        byDefault: {
-          id: undefined,
-          username: "",
-          type: ["Contributor"],
+        original: {
+          username :"",
+            type: "",
         },
+        byDefault: {
+          username: "toto",
+          type: ["Contributor","Donator"],
+        },
+        baseURL : "http://localhost:3004/Form_users",
       },
       contributions: {
-        original: {},
+        original: {
+          res: "",
+          date: "",
+          TextureID: "",
+          contributors:  "",
+        },
         byDefault: {
-          id: undefined,
           res: "c32",
           date: new Date().getTime(),
-          textureId: undefined,
-          contributors: [],
+          TextureID: 2,
+          contributors: ["230151512451"],
         },
-      },
-      model: {},
+        baseURL : "http://localhost:3004/Form_contributions",
+      
+       },
     };
   },
   components: {
     FFForm,
   },
+
   mounted() {
     console.log(this.$route.params);
   },
   computed: {
+    baseURL : function(){
+       return this.entityData.baseURL;
+    },
     original: function () {
       return this.entityData.original;
     },
+    value: function () {
+      return this.entityData.original;
+    },
     byDefault: function () {
-      return this.entityData.default;
+      return this.entityData.byDefault;
     },
     entityData: function () {
       return this.$data[this.entityName];
@@ -139,6 +156,24 @@ export default {
       }
       return false;
     },
+    // models: function(){
+    //   const entityName = this.entityName;
+    //   if (entityName === "users") {
+    //     return {
+    //         username :"",
+    //         type: "", 
+    //     };
+    //   }else if (entityName === "contributions") {
+    //     return {
+    //         id :"",
+    //         res: "",
+    //         date: "",
+    //         TextureID: "",
+    //         contributors:  "",
+    //     };
+    //   }
+    //   return null;
+    // },
   },
 };
 </script>
