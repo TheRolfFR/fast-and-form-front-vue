@@ -1,12 +1,14 @@
 /* eslint-disable */
 <template>
-  <FFForm
-    :title="'edit/add ' + $route.params.entity"
-    :schema="correctSchema"
-    :byDefault="byDefault"
-    :baseURL="baseURL"
-    :id="$route.params.id"
-  />
+  <div>
+    <h2>{{ "Edit/Add " + $route.params.entity }}</h2>
+    <FFForm
+      :schema="correctSchema"
+      :byDefault="byDefault"
+      :baseURL="baseURL"
+      :id="$route.params.id"
+    />
+  </div>
 </template>
 
 <script>

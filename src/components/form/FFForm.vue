@@ -1,7 +1,6 @@
 /* eslint-disable */
 <template>
   <div>
-    <h2 v-text="title"></h2>
     <div v-if="loading" class="text-center">
       <b-spinner small variant="primary" label="Loading data" /> Loading data...
     </div>
@@ -76,10 +75,6 @@ export default {
   props: {
     id: {
       required: true,
-    },
-    title: {
-      required: true,
-      type: String,
     },
     schema: {
       required: true,
