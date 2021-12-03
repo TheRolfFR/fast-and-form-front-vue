@@ -49,8 +49,8 @@
       </div>
     </template>
     <div class="mt-3">
-      <b-alert v-model="showAlert" :variant="bVarriant" dismissible>
-        {{ alertMessage }}
+      <b-alert v-model="alert.show" :variant="alert.variant" dismissible>
+        {{ alert.message }}
       </b-alert>
     </div>
     <div class="mt-3">
@@ -85,13 +85,6 @@ export default {
       required: true,
       type: Object,
     },
-    original: {
-      required: false,
-      type: Object,
-      default: function () {
-        return {};
-      },
-    },
     byDefault: {
       required: false,
     },
@@ -112,13 +105,6 @@ export default {
         return undefined;
       },
     },
-    loading: {
-      required: false,
-      type: Boolean,
-      default: function () {
-        return false;
-      },
-    },
   },
   data: function () {
     return {
@@ -135,9 +121,14 @@ export default {
       },
       isValid: false,
       errors: [],
-      showAlert: false,
-      bVarriant: "primary",
-      alertMessage: "",
+      alert: {
+        show: false,
+        variant: "primary",
+        message: "",
+      },
+      loading: true,
+
+      original: undefined,
     };
   },
   computed: {
@@ -166,7 +157,16 @@ export default {
       return result;
     },
     isNewForm: function () {
-      return !!this.id;
+      return !this.id;
+    },
+    method: function () {
+      return this.isNewForm ? "post" : "patch";
+    },
+    submitURL: function () {
+      return this.baseURL + "/" + (this.isNewForm ? "" : this.id);
+    },
+    getURL: function () {
+      return this.isNewForm ? undefined : this.submitURL;
     },
   },
   methods: {
@@ -225,22 +225,26 @@ export default {
       }
       return field;
     },
-    async submit() {
-      try {
-        const res = await axios.post(this.url, this.content);
-        this.dataForm = [...this.dataForm, res.data];
-      } catch (e) {
-        console.error(e);
-      }
-      let txt;
-      for (let x in this.content) {
-        txt += x + " :   " + this.content[x] + "\n";
-      }
-      this.showAlert = true;
-      this.clear();
-      this.alertMessage =
-        "Submit : Le formulaire est enregistré. Valeurs : [" + txt + "]";
-      this.bVarriant = "primary";
+    submit: function () {
+      if (!this.isValid) return;
+
+      axios[this.method](this.submitURL, this.content)
+        .then(() => {
+          this.alert.variant = "primary";
+          this.alert.message =
+            "Success : The form has been saved. Values : " +
+            JSON.stringify(this.content);
+        })
+        .catch((err) => {
+          console.error(err);
+          this.alert.variant = "danger";
+          this.alert.message =
+            "Error : The form has not been saved. Error : " +
+            JSON.stringify(err);
+        })
+        .finally(() => {
+          this.alert.show = true;
+        });
     },
     async getDataList() {
       const res = await axios
@@ -253,10 +257,45 @@ export default {
       // if I have no ID it means it is a new entry so put default value
       if (this.id === undefined) {
         copy = cloneDeep(this.byDefault);
+        Vue.set(this, "content", copy);
+        Vue.set(this, "original", copy);
+
+        this.loading = false;
       } else {
-        copy = cloneDeep(this.original);
+        this.getOriginal();
       }
-      Vue.set(this, "content", copy);
+    },
+    getOriginal: function () {
+      const getURL = this.getURL;
+      if (!getURL) {
+        this.loading = false;
+        this.alert = {
+          variant: "danger",
+          message: "Error while charging original, no get URL",
+          show: true,
+        };
+        return Promise.reject(new Error(this.alert.message));
+      }
+      return axios
+        .get(getURL)
+        .then((res) => {
+          let data = res.data;
+          console.log(data);
+          Vue.set(this, "content", data);
+          Vue.set(this, "original", data);
+        })
+        .catch((err) => {
+          this.alert = {
+            variant: "danger",
+            message: JSON.stringify(err),
+            show: true,
+          };
+
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
   created: function () {

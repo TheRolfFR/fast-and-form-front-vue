@@ -4,7 +4,6 @@
     :title="'edit/add ' + $route.params.entity"
     :schema="correctSchema"
     :byDefault="byDefault"
-    :original="original"
     :baseURL="baseURL"
     :id="$route.params.id"
   />

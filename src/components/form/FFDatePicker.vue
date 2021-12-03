@@ -25,6 +25,9 @@ export default {
       rawModel: new Date(),
     };
   },
+  mounted: function () {
+    this.rawModel = new Date(this.value);
+  },
   watch: {
     value: function (currentValue) {
       this.rawModel = new Date(currentValue);

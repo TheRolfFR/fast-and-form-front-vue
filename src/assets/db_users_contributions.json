@@ -19,16 +19,21 @@
     {
       "id": "1",
       "res": "c32",
-      "date": "123",
-      "TextureId": "1",
-      "contributors": ""
+      "date": 939945600000,
+      "TextureID": 1,
+      "contributors": [
+        "230151512453"
+      ]
     },
     {
       "id": "2",
       "res": "c32",
-      "date": "124",
-      "TextureId": "2",
-      "contributors": ""
+      "date": 940550400000,
+      "TextureID": 2,
+      "contributors": [
+        "230151512451",
+        "230151512456"
+      ]
     },
     {
       "res": "c32",
