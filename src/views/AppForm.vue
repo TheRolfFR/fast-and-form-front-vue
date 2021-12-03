@@ -5,8 +5,8 @@
     :schema="correctSchema"
     :byDefault="byDefault"
     :original="original"
-    :value="value"
     :baseURL="baseURL"
+    :id="$route.params.id"
   />
 </template>
 
@@ -20,43 +20,41 @@ export default {
     return {
       users: {
         original: {
-          username :"",
-            type: "",
+          username: "",
+          type: "",
         },
         byDefault: {
           username: "toto",
-          type: ["Contributor","Donator"],
+          type: ["Contributor", "Donator"],
         },
-        baseURL : "http://localhost:3004/Form_users",
+        baseURL: "http://localhost:3004/Form_users",
       },
       contributions: {
-        original: {
-          res: "",
-          date: "",
-          TextureID: "",
-          contributors:  "",
-        },
         byDefault: {
-          res: "c32",
+          res: "",
           date: new Date().getTime(),
+          TextureID: "",
+          contributors: [],
+        },
+        original: {
+          res: "c32",
+          date: new Date("1999-10-22").getTime(),
           TextureID: 2,
           contributors: ["230151512451"],
         },
-        baseURL : "http://localhost:3004/Form_contributions",
-      
-       },
+        baseURL: "http://localhost:3004/Form_contributions",
+      },
     };
   },
   components: {
     FFForm,
   },
-
-  mounted() {
-    console.log(this.$route.params);
-  },
   computed: {
-    baseURL : function(){
-       return this.entityData.baseURL;
+    id: function () {
+      return this.$route.id;
+    },
+    baseURL: function () {
+      return this.entityData.baseURL;
     },
     original: function () {
       return this.entityData.original;
@@ -161,7 +159,7 @@ export default {
     //   if (entityName === "users") {
     //     return {
     //         username :"",
-    //         type: "", 
+    //         type: "",
     //     };
     //   }else if (entityName === "contributions") {
     //     return {

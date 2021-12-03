@@ -22,11 +22,8 @@ export default {
   mixins: [abstractField],
   data: function () {
     return {
-      rawModel: new Date(this.value),
+      rawModel: new Date(),
     };
-  },
-  mounted: function () {
-    this.rawModel = this.$props.value;
   },
   watch: {
     value: function (currentValue) {
@@ -40,7 +37,11 @@ export default {
     outModel: function () {
       if (!this.schema.format) return this.rawModel;
 
-      const parsed_date = new Date(this.rawModel);
+      const parsed_date = this.rawModel;
+
+      if (!(parsed_date instanceof Date)) {
+        throw new Error("Not a date");
+      }
       // number of milliseconds since January 1st, 1970 at UTC
       if (this.schema.format === "timestamp") return parsed_date.getTime();
       // number of seconds since January 1st, 1970 at UTC
