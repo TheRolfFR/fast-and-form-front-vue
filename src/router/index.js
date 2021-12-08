@@ -29,7 +29,7 @@ const routes = [
     component: AppForm,
   },
   {
-    path: "/list",
+    path: "/list/:entity",
     name: "list",
     component: AppList,
   },
