@@ -11,7 +11,52 @@
         buttons
       ></b-form-radio-group>
     </div>
-    <b-table-simple class="my-2">
+    <b-table
+      :items="data"
+      :fields="fields"
+      select-mode="range"
+      responsive="sm"
+      ref="selectableTable"
+      class="my-2"
+      selectable
+      @row-selected="onRowSelected"
+    >
+      <!-- Example scoped slot for select state illustrative purposes -->
+      <template v-slot:cell(ff_selected)="{ rowSelected }"
+        ><div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            :checked="rowSelected ? true : false"
+            @click="clickParent($event)"
+          />
+        </div>
+      </template>
+
+      <template v-slot:cell(ff_actions)="row">
+        <FFListEntryActions
+          class="ff-entries-actions"
+          :edit="edit"
+          :row="row"
+          :editURL="
+            'http://localhost:8090/#/form/' + entity.name + '/' + row.item.id
+          "
+        />
+      </template>
+
+      <template #row-details="row">
+        <b-card>
+          <ul>
+            <template v-for="(value, key) in row.item">
+              <li :key="key" v-if="key !== '_showDetails'">
+                {{ key }}: {{ value }}
+              </li>
+            </template>
+          </ul>
+        </b-card>
+      </template>
+    </b-table>
+    <!-- <b-table-simple class="my-2">
       <FFTableHeader :columns="displayedColumns" />
       <b-tbody>
         <FFEntry
@@ -22,13 +67,12 @@
         />
       </b-tbody>
       <FFTableFooter />
-    </b-table-simple>
+    </b-table-simple> -->
     <b-pagination
       v-model="currentPage"
       :total-rows="rows"
       :per-page="perPage"
       align="right"
-      variant="secondary"
       size="sm"
       first-number
     ></b-pagination>
@@ -36,19 +80,21 @@
 </template>
 
 <script>
-import FFTableFooter from "./FFTableFooter.vue";
-import FFEntry from "./entry/FFEntry.vue";
-import FFTableHeader from "./FFTableHeader.vue";
+import FFListEntryActions from "../FFListEntryActions.vue";
+// import FFTableFooter from "./FFTableFooter.vue";
+// import FFEntry from "./entry/FFEntry.vue";
+// import FFTableHeader from "./FFTableHeader.vue";
 
 export default {
   name: "FFTable",
   components: {
-    FFTableHeader,
-    FFEntry,
-    FFTableFooter,
+    FFListEntryActions,
+    // FFTableHeader,
+    // FFEntry,
+    // FFTableFooter,
   },
   props: {
-    schema: {
+    entity: {
       required: true,
       type: Object,
     },
@@ -60,6 +106,23 @@ export default {
       required: true,
       type: Array,
     },
+    edit: {
+      required: true,
+      type: Boolean,
+    },
+  },
+  data: function () {
+    return {
+      options: [
+        { text: "25", value: 25 },
+        { text: "50", value: 50 },
+        { text: "100", value: 100 },
+      ],
+      rows: 25,
+      perPage: 1,
+      currentPage: 5,
+      selected: [],
+    };
   },
   computed: {
     displayedColumns: function () {
@@ -80,7 +143,48 @@ export default {
         this.displayedColumns.forEach((col) => {
           tmp[col] = entry[col];
         });
+
+        tmp.ff_selected = false;
+
         result.push(tmp);
+      });
+
+      return result;
+    },
+    fields: function () {
+      const prop_keys = Object.keys(this.entity.properties);
+      const result = [];
+      let tmp;
+      prop_keys.forEach((prop) => {
+        tmp = {
+          key: prop,
+        };
+        if (this.entity.properties[prop].displayName) {
+          tmp.label = this.entity.properties[prop].displayName;
+        }
+
+        if (
+          ["number", "string", "float", "date"].includes(
+            this.entity.properties[prop].type
+          )
+        ) {
+          tmp.sortable = true;
+        }
+
+        result.push(tmp);
+      });
+
+      // Add selection field
+      result.unshift({
+        key: "ff_selected",
+        label: "Selected",
+        sortable: true,
+      });
+
+      // Add actions field
+      result.push({
+        key: "ff_actions",
+        label: "Actions",
       });
 
       return result;
@@ -90,18 +194,12 @@ export default {
     hash: function (obj, index) {
       return JSON.stringify(obj) + "-" + index;
     },
-  },
-  data: function () {
-    return {
-      options: [
-        { text: "25", value: 25 },
-        { text: "50", value: 50 },
-        { text: "100", value: 100 },
-      ],
-      rows: 25,
-      perPage: 1,
-      currentPage: 5,
-    };
+    onRowSelected(items) {
+      this.selected = items.map((e) => e.id);
+    },
+    clickParent(event) {
+      event.target.parentElement.click();
+    },
   },
 };
 </script>

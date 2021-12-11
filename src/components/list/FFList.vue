@@ -10,14 +10,20 @@
         <FFListDataImport />
         <FFListDataExport />
       </div>
-      <FFListEntryActions class="ff-entries-actions" :edit="edit" />
+      <FFListEntryActions class="ff-entries-actions" :edit="edit" size="" />
     </b-button-toolbar>
     <div class="ff-list-main">
       <div v-if="loading" class="text-center">
         <b-spinner small variant="primary" label="Loading data" />
         Loading data...
       </div>
-      <FFTable v-else :data="data" :columns="[]" :schema="{}" />
+      <FFTable
+        v-else
+        :data="data"
+        :columns="[]"
+        :entity="entity"
+        :edit="edit"
+      />
     </div>
     <div class="ff-list-bottom">
       <FFListEntryNew />
@@ -55,6 +61,10 @@ export default {
     },
     entity: {
       required: true,
+      type: Object,
+    },
+    entityName: {
+      required: true,
       type: String,
     },
     edit: {
@@ -72,10 +82,10 @@ export default {
     };
   },
   created: function () {
-    this.read(this.entity);
+    this.read(this.entityName);
   },
   watch: {
-    entity: function (newValue) {
+    entityName: function (newValue) {
       this.read(newValue);
     },
   },
@@ -92,7 +102,7 @@ export default {
         .catch((err) => {
           const message = err.message || "List read failed";
           this.showToastDanger(
-            "Error while reading list data for entity " + this.entity,
+            "Error while reading list data for entity " + this.entityName,
             message
           );
 
@@ -117,6 +127,6 @@ export default {
   border-radius: 0.25rem;
 }
 .ff-list-top::before {
-  content: "Zone d'affichage de colonne et zone de filtrage";
+  content: "Zone d'affichage de colonne et zone de filtrage: Demillet et Mohamad";
 }
 </style>

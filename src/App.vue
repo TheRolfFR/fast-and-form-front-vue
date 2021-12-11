@@ -68,15 +68,6 @@ export default {
 </script>
 
 <style lang="scss">
-html,
-body,
-#app {
-  height: 100%;
-}
-html,
-body {
-  overflow: hidden;
-}
 #app {
   overflow: auto;
   &.dark {

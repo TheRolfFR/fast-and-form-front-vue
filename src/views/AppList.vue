@@ -5,7 +5,12 @@
         Switch edit mode
       </button>
     </div>
-    <FFList :baseURL="baseURL" :entity="entity" :edit="edit" :schema="{}" />
+    <FFList
+      :baseURL="baseURL"
+      :entity="entity"
+      :entityName="entityName"
+      :edit="edit"
+    />
   </div>
 </template>
 
@@ -18,16 +23,24 @@ export default {
     FFList,
   },
   computed: {
-    entity: function () {
-      const entity =
+    entityName: function () {
+      const entityName =
         this.$route && this.$route.params
           ? this.$route.params.entity
           : undefined;
-      if (entity === undefined) throw new Error("No entity given");
-      return entity;
+      if (entityName === undefined) throw new Error("No entity name given");
+      return entityName;
+    },
+    entity: function () {
+      const entityName = this.entityName;
+      if (this.entities[entityName] === undefined)
+        throw new Error("No entity given");
+      return this.entities[entityName] || {};
     },
     baseURL: function () {
-      return this.host + ":" + String(this.port) + "/" + "Form_" + this.entity;
+      return (
+        this.host + ":" + String(this.port) + "/" + "Form_" + this.entityName
+      );
     },
   },
   data: function () {
@@ -35,6 +48,10 @@ export default {
       host: "http://localhost",
       port: 3004,
       edit: true,
+      entities: {
+        users: require("../assets/entity_user.json"),
+        contributions: require("../assets/entity_contribution.json"),
+      },
     };
   },
   watch: {

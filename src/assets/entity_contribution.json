@@ -1,0 +1,39 @@
+{
+  "name": "contributions",
+  "displayName": "User contributions",
+
+  "properties": {
+    "id": {
+      "displayName": "ID",
+      "type": "string",
+      "rules": [{
+        "id": "length",
+        "type": "length",
+        "options": {
+          "min": 1
+        }
+      }]
+    },
+    "date": {
+      "displayName": "Date",
+      "type": "date",
+      "rules": [{
+        "id": "pastDate",
+        "type": "date",
+        "options": {
+          "prior": "today"
+        }
+      }]
+    },
+    "TextureID": {
+      "displayName": "Texture ID",
+      "type": "number",
+      "rules": []
+    },
+    "contributors": {
+      "displayName": "List of contributors",
+      "type": "array",
+      "rules": []
+    }
+  }
+}
