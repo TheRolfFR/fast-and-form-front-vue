@@ -1,9 +1,14 @@
 <template>
   <div class="ff-list">
-    <div class="ff-list-top">
-      <FFListColumnsDisplayed />
-      <FFListFilterZone />
+    <div class="ff-list-top row">
+      <div class="col-3">
+        <FFListColumnsDisplayed />
+      </div>
+      <div class="col-9">
+        <FFListFilterZone :entityName="entityName" v-model="filters" />
+      </div>
     </div>
+    <div>Filter object {{ filters }}</div>
     <b-button-toolbar class="ff-list-actions text-right my-2">
       <div class="filler"></div>
       <div class="ff-data-actions">
@@ -77,7 +82,9 @@ export default {
   },
   data: function () {
     return {
+      data: [],
       list: [],
+      filters: [],
       loading: true,
     };
   },
@@ -116,17 +123,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .filler {
   flex-grow: 1;
   text-align: center;
 }
 .ff-list-top {
   height: 220px;
-  border: 2px solid grey;
-  border-radius: 0.25rem;
-}
-.ff-list-top::before {
-  content: "Zone d'affichage de colonne et zone de filtrage: Demillet et Mohamad";
+
+  & > * {
+    height: 100%;
+  }
 }
 </style>

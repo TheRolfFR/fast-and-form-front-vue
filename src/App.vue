@@ -1,11 +1,11 @@
 <template>
-  <div id="app" :class="{ dark: dark }">
+  <div id="app" :class="{ dark: $store.ff.config.dark }">
     <b-navbar
       sticky
       toggleable="lg"
       class="mb-4 py-0"
       id="nav"
-      :type="dark ? 'dark' : 'light'"
+      :type="this.$store.ff.config.dark ? 'dark' : 'light'"
     >
       <div class="container">
         <b-navbar-brand href="/" class="px-2 py-2">
@@ -27,8 +27,8 @@
             <b-nav-item to="/form/users">Users</b-nav-item>
             <b-nav-item to="/form/contributions">Contributions</b-nav-item>
             <b-nav-item to="/testformgenerator">Test Form generator</b-nav-item>
-            <b-nav-item href="#" @click="dark = !dark">
-              <BIconMoon v-if="dark"></BIconMoon>
+            <b-nav-item href="#" @click="changeDark">
+              <BIconMoon v-if="$store.ff.config.dark"></BIconMoon>
               <BIconSun v-else></BIconSun>
             </b-nav-item>
           </b-navbar-nav>
@@ -52,16 +52,16 @@ export default {
   data() {
     return {
       logo: require("./assets/logo.png"),
-      dark: localStorage.getItem(THEME_KEY, false) === "true",
     };
   },
   components: {
     BIconSun,
     BIconMoon,
   },
-  watch: {
-    dark: function (currentValue) {
-      localStorage.setItem(THEME_KEY, currentValue);
+  methods: {
+    changeDark() {
+      this.$store.ff.config.dark = !this.$store.ff.config.dark;
+      localStorage.setItem(THEME_KEY, this.$store.ff.config.dark);
     },
   },
 };
@@ -71,6 +71,18 @@ export default {
 #app {
   overflow: auto;
   &.dark {
+    &::after {
+      content: "";
+      display: block;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #222;
+      z-index: -1;
+    }
+
     background: #222;
     color: white;
 

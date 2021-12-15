@@ -36,7 +36,7 @@ export default {
     Vue.use(IconsPlugin);
 
     // add a global fast and form variable
-    Vue.fastandform = {
+    Vue.ff = {
       data: {
         entities: {},
         forms: {},
@@ -64,7 +64,7 @@ export default {
       if (!name) throw new Error("No name provided, got " + name);
       if (!entity) throw new Error("No object provided for " + name);
 
-      this.fastandform.data.entities[name] = entity;
+      this.ff.data.entities[name] = entity;
     };
 
     /**
@@ -73,9 +73,9 @@ export default {
      * @returns Given entity with complete rules
      */
     Vue.getEntity = function (name) {
-      if (!this.fastandform.data.entities[name])
+      if (!this.ff.data.entities[name])
         throw new Error("No object found for " + name);
-      return this.fastandform.data.entities[name];
+      return this.ff.data.entities[name];
     };
 
     /**
@@ -99,5 +99,8 @@ export default {
     Object.keys(options.entities).forEach((k) => {
       Vue.loadEntity(k, options.entities[k]);
     });
+
+    const ff = Vue.observable({ ff: Vue.ff });
+    Vue.prototype.$store = ff;
   },
 };

@@ -18,6 +18,7 @@
       responsive="sm"
       ref="selectableTable"
       class="my-2"
+      :dark="$store.ff.config.dark"
       selectable
       @row-selected="onRowSelected"
     >
@@ -56,18 +57,6 @@
         </b-card>
       </template>
     </b-table>
-    <!-- <b-table-simple class="my-2">
-      <FFTableHeader :columns="displayedColumns" />
-      <b-tbody>
-        <FFEntry
-          class="ff-table-body"
-          v-for="(entry, index) in displayedData"
-          :key="hash(entry, index)"
-          :data="entry"
-        />
-      </b-tbody>
-      <FFTableFooter />
-    </b-table-simple> -->
     <b-pagination
       v-model="currentPage"
       :total-rows="rows"
@@ -81,17 +70,11 @@
 
 <script>
 import FFListEntryActions from "../FFListEntryActions.vue";
-// import FFTableFooter from "./FFTableFooter.vue";
-// import FFEntry from "./entry/FFEntry.vue";
-// import FFTableHeader from "./FFTableHeader.vue";
 
 export default {
   name: "FFTable",
   components: {
     FFListEntryActions,
-    // FFTableHeader,
-    // FFEntry,
-    // FFTableFooter,
   },
   props: {
     entity: {
