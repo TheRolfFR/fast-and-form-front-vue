@@ -46,7 +46,7 @@
       </template>
 
       <template #row-details="row">
-        <b-card>
+        <b-card :bg-variant="$store.ff.config.dark ? 'dark' : ''">
           <ul>
             <template v-for="(value, key) in row.item">
               <li :key="key" v-if="key !== '_showDetails'">
