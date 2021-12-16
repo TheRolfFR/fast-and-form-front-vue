@@ -5,10 +5,10 @@
       v-model="filterChosen"
       :options="filterOptions"
       name="radios-btn-default"
-      buttons
     ></b-form-radio-group>
     <b-form-input
-      v-model="text"
+      v-model="number"
+      @keypress="isNumber"
       placeholder="Value..."
       type="number"
       class="my-2"
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+
 export default {
   name: "FFFilterNumber",
   props: {
@@ -28,10 +30,9 @@ export default {
     return {
       filters: {
         input: ["==", "!=", ">", "<"],
-        // list: ["in", "out"],
       },
       filterChosen: "==",
-      text: "",
+      number: 0,
     };
   },
   computed: {
@@ -39,15 +40,37 @@ export default {
       return Object.values(this.filters).flat();
     },
     filterValue: function () {
-      return {
-        criteria: this.filterChosen,
-        value: this.text,
-      };
+      return [this.filterChosen, this.number];
     },
   },
   watch: {
+    number: function (n, o) {
+      if (n === "") {
+        this.number = o;
+      }
+    },
+    value: function (newValue) {
+      if (newValue === undefined) return;
+      this.filterChosen = newValue[0];
+      this.number = newValue[1];
+    },
     filterValue: function (newValue) {
       this.$emit("input", newValue);
+    },
+  },
+  methods: {
+    isNumber(evt) {
+      // number regex
+      // -.5
+      // +2.5
+      // 5
+      Vue.nextTick(() => {
+        const number = evt.target.value;
+        console.log(number, this.number);
+        if (this.number != number) {
+          //frferf
+        }
+      });
     },
   },
 };

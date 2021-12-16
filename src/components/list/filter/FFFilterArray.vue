@@ -48,6 +48,10 @@ export default {
     },
   },
   watch: {
+    value: function (newValue) {
+      if (newValue === undefined) return;
+      this.selected = newValue;
+    },
     filterValue: function (newValue) {
       this.$emit("input", newValue);
     },

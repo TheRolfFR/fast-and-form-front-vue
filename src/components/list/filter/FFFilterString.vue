@@ -5,7 +5,6 @@
       v-model="filterChosen"
       :options="filterOptions"
       name="radios-btn-default"
-      buttons
     ></b-form-radio-group>
     <b-form-input
       v-model="text"
@@ -38,13 +37,15 @@ export default {
       return Object.values(this.filters).flat();
     },
     filterValue: function () {
-      return {
-        criteria: this.filterChosen,
-        value: this.text,
-      };
+      return [this.filterChosen, this.text];
     },
   },
   watch: {
+    value: function (newValue) {
+      if (newValue === undefined) return;
+      this.filterChosen = newValue[0];
+      this.text = newValue[1];
+    },
     filterValue: function (newValue) {
       this.$emit("input", newValue);
     },

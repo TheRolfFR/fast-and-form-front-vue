@@ -5,7 +5,6 @@
       v-model="filterChosen"
       :options="filterOptions"
       name="radios-btn-default"
-      buttons
     ></b-form-radio-group>
     <FFDatePicker :schema="schema" v-model="filterValue" class="mt-2" />
   </b-form-group>
@@ -47,12 +46,16 @@ export default {
   },
   watch: {
     value: function (newValue) {
+      if (newValue === undefined) return;
       this.filterChosen = newValue[0];
       this.filterValue = newValue[1];
     },
     outValue: function (newValue, oldValue) {
       if (newValue != oldValue) {
-        this.$emit("input", newValue);
+        this.$emit(
+          "input",
+          !this.filterValue || isNaN(this.filterValue) ? undefined : newValue // fixes bug where filterValue is not outed correctly
+        );
       }
     },
   },

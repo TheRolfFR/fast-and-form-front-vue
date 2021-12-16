@@ -63,11 +63,16 @@ export default {
     };
   },
   watch: {
+    value: function (newValue) {
+      if (newValue === undefined) return;
+      this.filterValue = newValue;
+    },
     filterValue: function (newValue) {
       this.$emit("input", newValue);
     },
     status: function (newValue) {
       this.$emit("input", newValue ? this.filterValue : undefined);
+      this.$forceUpdate();
     },
   },
 };
