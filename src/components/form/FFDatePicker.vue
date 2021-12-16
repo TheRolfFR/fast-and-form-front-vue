@@ -4,7 +4,9 @@
     :disabled="disabled"
     today-button
     value-as-date
+    :size="schema.size || ''"
     :min="schema.min"
+    boundary="window"
     :max="schema.max"
     :placeholder="schema.placeholder"
     :locale="schema.locale || 'en'"

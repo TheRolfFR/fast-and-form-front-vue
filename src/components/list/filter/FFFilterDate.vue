@@ -32,6 +32,7 @@ export default {
       filterValue: undefined,
       schema: {
         dark: this.$store.ff.config.dark,
+        size: "sm",
         format: "timestamp",
       },
     };
