@@ -1,10 +1,17 @@
 <template>
-  <div class="col">
+  <div class="ff-toggable-filter">
     <b-form-checkbox v-model="status">
       {{ prop.displayName }}
     </b-form-checkbox>
     <FFFilterString
       v-if="prop.type === 'string'"
+      :prop="prop"
+      :disabled="!status"
+      v-model="filterValue"
+      class="mt-2"
+    />
+    <FFFilterNumber
+      v-if="prop.type === 'number'"
       :prop="prop"
       :disabled="!status"
       v-model="filterValue"
@@ -17,16 +24,25 @@
       v-model="filterValue"
       class="mt-2"
     />
+    <FFFilterDate
+      v-if="prop.type === 'date'"
+      :prop="prop"
+      :disabled="!status"
+      v-model="filterValue"
+      class="mt-2"
+    />
   </div>
 </template>
 
 <script>
 import FFFilterArray from "./FFFilterArray.vue";
 import FFFilterString from "./FFFilterString.vue";
+import FFFilterDate from "./FFFilterDate.vue";
+import FFFilterNumber from "./FFFilterNumber.vue";
 
 export default {
   name: "FFToggableFilter",
-  components: { FFFilterString, FFFilterArray },
+  components: { FFFilterString, FFFilterArray, FFFilterDate, FFFilterNumber },
   props: {
     propName: {
       type: String,
@@ -50,6 +66,15 @@ export default {
     filterValue: function (newValue) {
       this.$emit("input", newValue);
     },
+    status: function (newValue) {
+      this.$emit("input", newValue ? this.filterValue : undefined);
+    },
   },
 };
 </script>
+
+<style>
+.ff-toggable-filter .btn-group-toggle {
+  width: 100%;
+}
+</style>

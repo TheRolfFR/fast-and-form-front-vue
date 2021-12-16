@@ -34,6 +34,7 @@ export default {
     },
     outModel: function (currentValue) {
       this.value = currentValue;
+      this.$emit("input", currentValue);
     },
   },
   computed: {

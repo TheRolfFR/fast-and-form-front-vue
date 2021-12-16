@@ -33,7 +33,22 @@
     "contributors": {
       "displayName": "List of contributors",
       "type": "array",
-      "rules": []
+      "rules": [{
+        "id": "correct_types",
+        "type": "values",
+        "options": {
+          "child": "string",
+          "values": [
+            "230151512451",
+            "230151512452",
+            "230151512453",
+            "230151512454",
+            "230151512455",
+            "230151512456",
+            "230151512457"
+          ]
+        }
+      }]
     }
   }
 }

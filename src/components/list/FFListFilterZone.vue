@@ -4,19 +4,20 @@
     :bg-variant="$store.ff.config.dark ? 'dark' : ''"
   >
     <h4>Filter zone</h4>
-    <div
-      v-for="(propLine, index) in propertiesDivided"
-      :key="index"
-      class="row"
-    >
-      <template v-for="(prop, propKey) in propLine"
-        ><FFToggableFilter
-          :prop="prop"
-          :propName="propKey"
-          :key="propKey"
-          v-model="filters[propKey]"
-        />
-      </template>
+    <div class="container">
+      <div
+        v-for="(propLine, index) in propertiesDivided"
+        :key="index"
+        class="row"
+      >
+        <div class="col-4" v-for="(prop, propKey) in propLine" :key="propKey">
+          <FFToggableFilter
+            :prop="prop"
+            :propName="propKey"
+            v-model="filters[propKey]"
+          />
+        </div>
+      </div>
     </div>
   </b-card>
 </template>
@@ -68,7 +69,7 @@ export default {
 <style>
 .ff-filter-card {
   height: 100%;
-  overflow: hidden scroll;
+  overflow: auto scroll;
 }
 .ff-filter-card > .card-body {
   padding: 0.4rem;
