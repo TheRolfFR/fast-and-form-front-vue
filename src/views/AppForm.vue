@@ -134,11 +134,12 @@ export default {
               validator: VueFormGenerator.validators.integer,
             },
             {
-              type: "Checklist",
+              type: "Autocomplete",
               label: "Contributors",
               model: "contributors",
+              placeholder: "Contributors who made the texture",
               required: true,
-              listBox: true,
+              multiple: true,
               values: [
                 "230151512451",
                 "230151512452",

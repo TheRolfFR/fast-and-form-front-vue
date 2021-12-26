@@ -64,7 +64,9 @@ import ToastMixin from "../../mixins/ToastMixin"; // mixin to show toasts for er
 
 import Vue from "vue";
 import FFDatePicker from "./FFDatePicker.vue";
+import FFAutocomplete from "./FFAutocomplete.vue";
 import { validators } from "vue-form-generator";
+Vue.component("fieldAutocomplete", FFAutocomplete);
 Vue.component("fieldDatePicker", FFDatePicker);
 import axios from "axios";
 import { cloneDeep } from "lodash";
