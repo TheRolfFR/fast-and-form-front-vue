@@ -64,11 +64,16 @@ import ToastMixin from "../../mixins/ToastMixin"; // mixin to show toasts for er
 
 import Vue from "vue";
 import FFDatePicker from "./FFDatePicker.vue";
-import FFAutocomplete from "./FFAutocomplete.vue";
-import { validators } from "vue-form-generator";
-Vue.component("fieldAutocomplete", FFAutocomplete);
+
 Vue.component("fieldDatePicker", FFDatePicker);
+import FFAutocomplete from "./FFAutocomplete.vue";
+Vue.component("fieldAutocomplete", FFAutocomplete);
+import FFAutocompleteAsync from "./FFAutocompleteAsync.vue";
+Vue.component("fieldAutocompleteAsync", FFAutocompleteAsync);
+
+import { validators } from "vue-form-generator";
 import axios from "axios";
+
 import { cloneDeep } from "lodash";
 
 export default {

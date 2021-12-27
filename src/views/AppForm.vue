@@ -134,7 +134,7 @@ export default {
               validator: VueFormGenerator.validators.integer,
             },
             {
-              type: "Autocomplete",
+              type: "AutocompleteAsync",
               label: "Contributors",
               model: "contributors",
               placeholder: "Contributors who made the texture",

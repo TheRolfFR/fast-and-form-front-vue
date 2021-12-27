@@ -38,14 +38,12 @@
             :name="schemaTweaked.name"
             :size="schemaTweaked.size"
             autocomplete="off"
-            @focus="showOptions = true"
-            @blur="showOptions = false"
           ></b-form-input>
         </b-form-group>
       </b-form>
 
       <div class="ff-autocomplete-container">
-        <div class="ff-autocomplete-content">
+        <div class="ff-autocomplete-content" v-show="!loadingSearch">
           <b-list-group>
             <b-list-group-item
               class="px-2 py-1"
@@ -57,6 +55,13 @@
             </b-list-group-item>
           </b-list-group>
         </div>
+        <b-spinner
+          class="text-center"
+          variant="primary"
+          small
+          label="Spinning"
+          v-show="loadingSearch"
+        ></b-spinner>
       </div>
     </template>
   </b-form-tags>
@@ -68,6 +73,13 @@ import { abstractField } from "vue-form-generator";
 export default {
   name: "ff-autocomplete",
   mixins: [abstractField],
+  props: {
+    loadingSearch: {
+      required: false,
+      type: Boolean,
+      default: () => false,
+    },
+  },
   computed: {
     schemaTweaked() {
       const res = this.schema;
@@ -128,7 +140,6 @@ export default {
   data: function () {
     return {
       search: "",
-      showOptions: false,
     };
   },
   watch: {
@@ -145,6 +156,9 @@ export default {
       }
 
       if (!valid) this.value = o;
+    },
+    search: function (n) {
+      this.$emit("change", n, this.schemaTweaked["options-value"]);
     },
   },
   methods: {
