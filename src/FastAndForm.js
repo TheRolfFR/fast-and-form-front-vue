@@ -4,6 +4,10 @@ import merge from "deepmerge";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
+// import components
+import FFList from "./components/list/FFList.vue";
+import FFForm from "./components/form/FFForm.vue";
+
 /**
  * @typedef {Object} FFOptions
  * @property {Boolean} dark Puts fast and form components in dark mode
@@ -21,7 +25,7 @@ const defaultOptions = {
   entities: {},
 };
 
-export default {
+const ffVue = {
   /**
    *
    * @param {import('vue')} Vue Vue instance
@@ -34,6 +38,10 @@ export default {
     Vue.use(BootstrapVue);
     // Optionally install the BootstrapVue icon components plugin
     Vue.use(IconsPlugin);
+
+    // add both components
+    Vue.component(FFForm);
+    Vue.component(FFList);
 
     // add a global fast and form variable
     Vue.ff = {
@@ -104,3 +112,10 @@ export default {
     Vue.prototype.$store = ff;
   },
 };
+
+// Automatic installation if Vue has been added to the global scope.
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(ffVue);
+}
+
+export default ffVue;

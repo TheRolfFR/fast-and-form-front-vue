@@ -1,10 +1,27 @@
 {
-    "name": "frontend",
-    "version": "0.1.0",
-    "private": true,
+    "name": "fast-and-form-vue",
+    "main": "dist/fast-and-form-vue.common.js",
+    "version": "0.0.1",
+    "private": false,
+    "description": "Vue.js implementation of the Fast & Form frontend components",
+    "keywords": [
+        "fast",
+        "form",
+        "generation",
+        "front",
+        "vue",
+        "component"
+    ],
+    "homepage": "https://github.com/TheRolfFR/fast-and-form-front-vue",
+    "bugs": {
+        "url": "https://github.com/TheRolfFR/fast-and-form-front-vue/issues"
+    },
+    "license": "UNLICENSED",
+    "files": ["dist/*"],
     "scripts": {
         "serve": "vue-cli-service serve --port 8090",
         "build": "vue-cli-service build",
+        "build-bundle": "vue-cli-service build --target lib --name fast-and-form-vue ./src/FastAndForm.js",
         "test:unit": "vue-cli-service test:unit",
         "lint": "vue-cli-service lint",
         "json-server": "json-server --w src/assets/db.json --port 3003",

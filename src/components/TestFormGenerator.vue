@@ -19,14 +19,14 @@
         ></b-tab>
 
         <b-tab title="update">
-          <label > ID number of the field you want to modify: </label>
-          <br>
+          <label> ID number of the field you want to modify: </label>
+          <br />
           <input type="number" id="number" name="number" />
-          <br>
-          <label > new username: </label>
-          <br>
+          <br />
+          <label> new username: </label>
+          <br />
           <input type="text" id="name" name="name" />
-          <br>
+          <br />
           <b-button @click="update">update</b-button>
         </b-tab>
       </b-tabs>
@@ -147,10 +147,13 @@ export default {
     // modifie les données dans le json grace a leur ID
     async update() {
       try {
-        await axios.patch(`${baseURL}/${document.getElementById("number").value}`, {
-          // update de username
-          username: document.getElementById("name").value,
-        });
+        await axios.patch(
+          `${baseURL}/${document.getElementById("number").value}`,
+          {
+            // update de username
+            username: document.getElementById("name").value,
+          }
+        );
         const res = await axios.get(baseURL);
         this.dataForm = res.data;
       } catch (e) {
@@ -160,4 +163,3 @@ export default {
   },
 };
 </script>
-
