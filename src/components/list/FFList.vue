@@ -2,7 +2,7 @@
   <div class="ff-list">
     <div class="ff-list-top row">
       <div class="col-3">
-        <FFListColumnsDisplayed />
+        <FFListColumnsDisplayed :columns="columns" />
       </div>
       <div class="col-9">
         <FFListFilterZone :entityName="entityName" v-model="filters" />
@@ -13,15 +13,22 @@
         <FFListDataImport class="mr-1" />
         <FFListDataExport />
       </div>
+
       <div class="filler"></div>
+      <b-button variant="outline-secondary" class="ml-2" @click="refresh">
+        <b-icon icon="arrow-clockwise" aria-label="Refresh data" />
+        Refresh
+      </b-button>
+      <div class="filler"></div>
+
       <FFListEntryActions class="ff-entries-actions" :edit="edit" size="" />
     </b-button-toolbar>
     <div class="ff-list-main">
-      <div v-if="loading" class="text-center">
+      <div v-if="loading" class="text-center my-5">
         <b-spinner small variant="primary" label="Loading data" />
         Loading data...
       </div>
-      <FFTable v-else :data="data" :columns="[]" :entity="entity" />
+      <FFTable v-else :data="data" :columns="columns" :entity="entity" />
     </div>
     <div class="ff-list-bottom text-right">
       <FFListEntryNew :url="newEntryURL" />
@@ -79,20 +86,28 @@ export default {
       list: [],
       filters: [],
       loading: true,
+      columns: [],
     };
   },
   computed: {
+    encodedGetParameters: function () {
+      return encodeURI(
+        `?columns=${JSON.stringify(this.columns)}&filters=${JSON.stringify(
+          this.filters
+        )}`
+      );
+    },
     edit: function () {
       return Vue.ff.config.edit;
     },
     readURL: function () {
       if (Vue.ff.config.jsonserver) {
-        return this.baseURL;
+        return this.baseURL + this.encodedGetParameters;
       }
       const myURL = new URL(Vue.ff.config.baseURL);
       myURL.pathname = join(Vue.ff.config.database, this.entityName);
 
-      return myURL.toString();
+      return myURL.toString() + this.encodedGetParameters;
     },
   },
   created: function () {
@@ -104,6 +119,9 @@ export default {
     },
   },
   methods: {
+    refresh: function () {
+      this.read();
+    },
     read: function () {
       this.loading = true;
       return axios
