@@ -5,6 +5,7 @@
     <FFForm
       :schema="correctSchema"
       :byDefault="byDefault"
+      :entityName="entityName"
       :baseURL="baseURL"
       :id="$route.params.id"
     />

@@ -48,7 +48,12 @@
       </div>
     </template>
     <div class="mt-3">
-      <b-alert v-model="alert.show" :variant="alert.variant" dismissible>
+      <b-alert
+        style="max-height: 220px; overflow: auto"
+        v-model="alert.show"
+        :variant="alert.variant"
+        dismissible
+      >
         {{ alert.message }}
       </b-alert>
     </div>
@@ -63,6 +68,8 @@
 import ToastMixin from "../../mixins/ToastMixin"; // mixin to show toasts for error for example
 
 import Vue from "vue";
+import { join } from "path";
+
 import FFDatePicker from "./FFDatePicker.vue";
 
 Vue.component("fieldDatePicker", FFDatePicker);
@@ -92,6 +99,10 @@ export default {
     },
     baseURL: {
       required: true,
+    },
+    entityName: {
+      required: true,
+      type: String,
     },
     cancelButton: {
       required: false,
@@ -165,10 +176,30 @@ export default {
       return this.isNewForm ? "post" : "patch";
     },
     submitURL: function () {
-      return this.baseURL + "/" + (this.isNewForm ? "" : this.id);
+      if (Vue.ff.config.jsonserver) {
+        return this.baseURL + "/" + (this.isNewForm ? "" : this.id);
+      }
+
+      const myURL = new URL(Vue.ff.config.baseURL);
+      myURL.pathname = join(
+        Vue.ff.config.database,
+        this.entityName,
+        this.isNewForm ? "" : this.id
+      );
+
+      return myURL.toString();
     },
     getURL: function () {
-      return this.isNewForm ? undefined : this.submitURL;
+      if (this.isNewForm) return undefined;
+
+      if (Vue.ff.config.jsonserver) {
+        return this.baseURL + "/" + (this.isNewForm ? "" : this.id);
+      }
+
+      const myURL = new URL(Vue.ff.config.baseURL);
+      myURL.pathname = join(Vue.ff.config.database, this.entityName, this.id);
+
+      return myURL.toString();
     },
   },
   methods: {
@@ -231,20 +262,17 @@ export default {
 
       axios[this.method](this.submitURL, this.content)
         .then(() => {
-          this.alert.variant = "primary";
-          this.alert.message =
-            "Success : The form has been saved. Values : " +
-            JSON.stringify(this.content);
+          this.showToastSuccess(
+            JSON.stringify(this.content),
+            "Success : The entry has been saved:"
+          );
         })
         .catch((err) => {
           console.error(err);
-          this.alert.variant = "danger";
-          this.alert.message =
-            "Error : The form has not been saved. Error : " +
-            JSON.stringify(err);
-        })
-        .finally(() => {
-          this.alert.show = true;
+          this.showToastDanger(
+            err.message,
+            "Error : The form has not been saved"
+          );
         });
     },
     async getDataList() {
@@ -264,7 +292,14 @@ export default {
         this.loading = false;
         this.$forceUpdate();
       } else {
-        this.getOriginal();
+        this.getOriginal().catch((err) => {
+          console.error(err);
+          this.showToastDanger(
+            err.message,
+            "Error : The form could not get the original value"
+          );
+          this.$forceUpdate();
+        });
       }
     },
     getOriginal: function () {

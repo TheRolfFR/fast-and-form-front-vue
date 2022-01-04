@@ -14,7 +14,7 @@ const THEME_KEY = "theme_key";
 Vue.use(FastAndForm, {
   dark: localStorage.getItem(THEME_KEY, false) === "true",
   baseURL: "http://localhost:3004/Form_",
-  edit: false,
+  edit: true,
   entities: {
     users: require("./assets/entity_user.json"),
     contributions: require("./assets/entity_contribution.json"),

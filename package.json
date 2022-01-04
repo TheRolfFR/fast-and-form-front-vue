@@ -17,7 +17,9 @@
         "url": "https://github.com/TheRolfFR/fast-and-form-front-vue/issues"
     },
     "license": "UNLICENSED",
-    "files": ["dist/*"],
+    "files": [
+        "dist/*"
+    ],
     "scripts": {
         "serve": "vue-cli-service serve --port 8090",
         "build": "vue-cli-service build",
@@ -35,6 +37,7 @@
         "core-js": "^3.6.5",
         "deepmerge": "^4.2.2",
         "lodash": "^4.17.21",
+        "path": "^0.12.7",
         "vue": "^2.6.11",
         "vue-form-generator": "^2.3.4",
         "vue-router": "^3.2.0"

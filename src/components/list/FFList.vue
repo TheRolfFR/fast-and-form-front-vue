@@ -31,6 +31,8 @@
 
 <script>
 import Vue from "vue";
+import { join } from "path";
+
 import FFListFilterZone from "./FFListFilterZone.vue";
 import FFListColumnsDisplayed from "./FFListColumnsDisplayed.vue";
 import FFListEntryNew from "./FFListEntryNew.vue";
@@ -83,6 +85,15 @@ export default {
     edit: function () {
       return Vue.ff.config.edit;
     },
+    readURL: function () {
+      if (Vue.ff.config.jsonserver) {
+        return this.baseURL;
+      }
+      const myURL = new URL(Vue.ff.config.baseURL);
+      myURL.pathname = join(Vue.ff.config.database, this.entityName);
+
+      return myURL.toString();
+    },
   },
   created: function () {
     this.read(this.entityName);
@@ -96,7 +107,7 @@ export default {
     read: function () {
       this.loading = true;
       return axios
-        .get(this.baseURL)
+        .get(this.readURL)
         .then((res) => {
           const json = res.data;
 

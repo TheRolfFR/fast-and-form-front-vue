@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import "@/assets/style.css";
 import { BIconSun, BIconMoon } from "bootstrap-vue";
 
 const THEME_KEY = "theme_key";

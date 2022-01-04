@@ -14,7 +14,7 @@ export default {
     showToast: function (description, title, variant) {
       return this.$bvToast.toast(description, {
         title: title,
-        noAutoHide: true,
+        noAutoHide: false,
         appendToast: false,
         variant: variant,
         toaster: "b-toaster-bottom-right",

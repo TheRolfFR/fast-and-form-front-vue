@@ -12,6 +12,7 @@ import FFForm from "./components/form/FFForm.vue";
  * @typedef {Object} FFOptions
  * @property {Boolean} dark Puts fast and form components in dark mode
  * @property {Boolean} edit Sets in edit mode
+ * @property {String} database Default database name
  * @property {String} baseURL Backend root url for data manipulation
  * @property {Object[]} parameters Parameter file content objects
  * @property {Object} entities Entities objects
@@ -21,6 +22,7 @@ const defaultOptions = {
   dark: false,
   edit: true,
   baseURL: undefined,
+  database: "fastandform",
   parameters: [],
   entities: {},
 };
@@ -55,6 +57,8 @@ const ffVue = {
         edit: options.edit || defaultOptions.edit,
         dark: options.dark || defaultOptions.dark,
         baseURL: options.baseURL || defaultOptions.baseURL,
+        database: options.database || defaultOptions.database,
+        jsonserver: true, // TODO: Remove this line when switching to fast and form and baseURL
       },
     };
 
@@ -114,7 +118,7 @@ const ffVue = {
 };
 
 // Automatic installation if Vue has been added to the global scope.
-if (typeof window !== 'undefined' && window.Vue) {
+if (typeof window !== "undefined" && window.Vue) {
   window.Vue.use(ffVue);
 }
 
