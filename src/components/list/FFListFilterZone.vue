@@ -4,6 +4,9 @@
     :bg-variant="$store.ff.config.dark ? 'dark' : ''"
   >
     <h4>Filter zone</h4>
+    <span style="position: absolute; top: 0; right: 0; opacity: 0.7">{{
+      value
+    }}</span>
     <div class="container">
       <div
         v-for="(propLine, index) in propertiesDivided"

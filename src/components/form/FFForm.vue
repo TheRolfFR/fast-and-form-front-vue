@@ -217,9 +217,8 @@ export default {
     addValidator(field) {
       // fix select required tag
       if (field.required) {
-        if (field.type === "select") {
-          field.validator = this.append(field.validator, validators.required);
-        } else if (field.type === "datePicker" || field.type === "DatePicker") {
+        field.validator = this.append(field.validator, validators.required);
+        if (field.type === "datePicker" || field.type === "DatePicker") {
           field.validator = this.append(field.validator, validators.date);
         } else if (field.type === "Checklist") {
           field.validator = this.append(field.validator, validators.array);
@@ -263,6 +262,7 @@ export default {
         Vue.set(this, "original", copy);
 
         this.loading = false;
+        this.$forceUpdate();
       } else {
         this.getOriginal();
       }
@@ -311,8 +311,11 @@ export default {
       deep: true,
       immediate: true,
     },
-    id: function () {
-      this.changeContent();
+    id: {
+      handler: function () {
+        this.changeContent();
+      },
+      immediate: true,
     },
     title: {
       handler: function () {

@@ -21,12 +21,12 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav style="margin-left: auto !important">
-            <b-nav-item to="/testdb">Test DB</b-nav-item>
+            <!-- <b-nav-item to="/testdb">Test DB</b-nav-item> -->
             <b-nav-item to="/list/users">User list</b-nav-item>
             <b-nav-item to="/list/contributions">Contribution list</b-nav-item>
             <b-nav-item to="/form/users">Users</b-nav-item>
             <b-nav-item to="/form/contributions">Contributions</b-nav-item>
-            <b-nav-item to="/testformgenerator">Test Form generator</b-nav-item>
+            <!-- <b-nav-item to="/testformgenerator">Test Form generator</b-nav-item> -->
             <b-nav-item href="#" @click="changeDark">
               <BIconMoon v-if="$store.ff.config.dark"></BIconMoon>
               <BIconSun v-else></BIconSun>

@@ -8,6 +8,7 @@
     </b-button>
     <b-button
       v-b-tooltip.hover="'See full entry'"
+      v-if="row"
       @click="row ? row.toggleDetails() : () => {}"
     >
       <b-icon

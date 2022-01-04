@@ -8,13 +8,12 @@
         <FFListFilterZone :entityName="entityName" v-model="filters" />
       </div>
     </div>
-    <div>Filter object {{ filters }}</div>
-    <b-button-toolbar class="ff-list-actions text-right my-2">
-      <div class="filler"></div>
+    <b-button-toolbar key-nav class="ff-list-actions text-right my-2">
       <div class="ff-data-actions">
-        <FFListDataImport />
+        <FFListDataImport class="mr-1" />
         <FFListDataExport />
       </div>
+      <div class="filler"></div>
       <FFListEntryActions class="ff-entries-actions" :edit="edit" size="" />
     </b-button-toolbar>
     <div class="ff-list-main">
@@ -22,21 +21,16 @@
         <b-spinner small variant="primary" label="Loading data" />
         Loading data...
       </div>
-      <FFTable
-        v-else
-        :data="data"
-        :columns="[]"
-        :entity="entity"
-        :edit="edit"
-      />
+      <FFTable v-else :data="data" :columns="[]" :entity="entity" />
     </div>
-    <div class="ff-list-bottom">
-      <FFListEntryNew />
+    <div class="ff-list-bottom text-right">
+      <FFListEntryNew :url="newEntryURL" />
     </div>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import FFListFilterZone from "./FFListFilterZone.vue";
 import FFListColumnsDisplayed from "./FFListColumnsDisplayed.vue";
 import FFListEntryNew from "./FFListEntryNew.vue";
@@ -64,6 +58,10 @@ export default {
       required: true,
       type: String,
     },
+    newEntryURL: {
+      required: true,
+      type: String,
+    },
     entity: {
       required: true,
       type: Object,
@@ -71,13 +69,6 @@ export default {
     entityName: {
       required: true,
       type: String,
-    },
-    edit: {
-      required: false,
-      type: Boolean,
-      default: function () {
-        return false;
-      },
     },
   },
   data: function () {
@@ -87,6 +78,11 @@ export default {
       filters: [],
       loading: true,
     };
+  },
+  computed: {
+    edit: function () {
+      return Vue.ff.config.edit;
+    },
   },
   created: function () {
     this.read(this.entityName);

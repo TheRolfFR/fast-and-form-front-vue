@@ -16,6 +16,8 @@
       :fields="fields"
       select-mode="range"
       responsive="sm"
+      striped
+      hover
       ref="selectableTable"
       class="my-2"
       :dark="$store.ff.config.dark"
@@ -56,19 +58,35 @@
           </ul>
         </b-card>
       </template>
+
+      <!-- default data cell scoped slot -->
+      <template #cell()="data">
+        <template v-if="entity.properties[data.field.key].type === 'date'">
+          {{ new Date(data.value).toISOString().split("T")[0] }}
+        </template>
+        <template
+          v-else-if="entity.properties[data.field.key].type === 'array'"
+        >
+          <template v-for="(el, i) in data.value">
+            <b-badge :key="i" no-remove class="mr-1">{{ el }}</b-badge>
+          </template>
+        </template>
+        <template v-else>{{ data.value }}</template>
+      </template>
     </b-table>
-    <b-pagination
+    <!-- <b-pagination
       v-model="currentPage"
       :total-rows="rows"
       :per-page="perPage"
       align="right"
       size="sm"
       first-number
-    ></b-pagination>
+    ></b-pagination> -->
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import FFListEntryActions from "../FFListEntryActions.vue";
 
 export default {
@@ -88,10 +106,6 @@ export default {
     columns: {
       required: true,
       type: Array,
-    },
-    edit: {
-      required: true,
-      type: Boolean,
     },
   },
   data: function () {
@@ -161,7 +175,6 @@ export default {
       result.unshift({
         key: "ff_selected",
         label: "Selected",
-        sortable: true,
       });
 
       // Add actions field
@@ -171,6 +184,9 @@ export default {
       });
 
       return result;
+    },
+    edit: function () {
+      return Vue.ff.config.edit;
     },
   },
   methods: {

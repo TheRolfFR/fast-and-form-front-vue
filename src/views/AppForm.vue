@@ -25,8 +25,8 @@ export default {
           type: "",
         },
         byDefault: {
-          username: "toto",
-          type: ["Contributor", "Donator"],
+          username: "",
+          type: ["Contributor"],
         },
         baseURL: "http://localhost:3004/Form_users",
       },

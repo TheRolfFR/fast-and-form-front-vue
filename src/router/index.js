@@ -16,7 +16,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 const routes = [
   {
     path: "/",
-    redirect: "/list",
+    redirect: "/list/users",
   },
   {
     path: "/testdb",

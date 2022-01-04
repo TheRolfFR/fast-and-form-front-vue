@@ -1,20 +1,22 @@
 <template>
   <div>
     <div class="text-right">
-      <button class="btn btn-secondary mb-1" @click="edit = !edit">
-        Switch edit mode
+      <button class="btn btn-secondary mb-1" @click="switchEditMode">
+        <b-icon :icon="edit ? 'pencil-fill' : 'book-fill'"></b-icon>
+        <span> {{ (edit ? "Edit" : "Read") + " mode" }}</span>
       </button>
     </div>
     <FFList
       :baseURL="baseURL"
+      :newEntryURL="'/#/form/' + entityName"
       :entity="entity"
       :entityName="entityName"
-      :edit="edit"
     />
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import FFList from "../components/list/FFList.vue";
 
 export default {
@@ -42,21 +44,30 @@ export default {
         this.host + ":" + String(this.port) + "/" + "Form_" + this.entityName
       );
     },
+    edit: function () {
+      return Vue.ff.config.edit;
+    },
   },
   data: function () {
     return {
       host: "http://localhost",
       port: 3004,
-      edit: true,
       entities: {
         users: require("../assets/entity_user.json"),
         contributions: require("../assets/entity_contribution.json"),
       },
     };
   },
+  methods: {
+    switchEditMode: function () {
+      Vue.ff.config.edit = !Vue.ff.config.edit;
+    },
+  },
   watch: {
     $route(to, from) {
-      console.log(to, from);
+      to;
+      from;
+      // console.log(to, from);
     },
   },
 };
