@@ -17,6 +17,7 @@
       select-mode="range"
       responsive="sm"
       striped
+      :outlined="!$store.ff.config.dark"
       hover
       ref="selectableTable"
       class="my-2"
