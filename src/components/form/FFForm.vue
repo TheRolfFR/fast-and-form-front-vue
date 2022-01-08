@@ -66,12 +66,11 @@
 
 <script>
 import ToastMixin from "../../mixins/ToastMixin"; // mixin to show toasts for error for example
+import CRUDMixin from "../../mixins/CRUDMixin"; // mixin to show make CRUD operations on Fast&Form data
 import Vue from "vue";
 import VueFormGenerator from "vue-form-generator";
 
 Vue.use(VueFormGenerator);
-
-import { join } from "path";
 
 import FFDatePicker from "./FFDatePicker.vue";
 
@@ -87,7 +86,7 @@ import axios from "axios";
 import { cloneDeep } from "lodash";
 
 export default {
-  mixins: [ToastMixin],
+  mixins: [ToastMixin, CRUDMixin],
   name: "ff-form",
   props: {
     id: {
@@ -95,9 +94,6 @@ export default {
       default: function () {
         return undefined;
       },
-    },
-    baseURL: {
-      required: true,
     },
     entityName: {
       required: true,
@@ -122,9 +118,7 @@ export default {
     return {
       dataList: [],
 
-      content: this.value,
-
-      url: this.baseURL,
+      content: {},
 
       formOptions: {
         validateAfterLoad: true,
@@ -205,37 +199,8 @@ export default {
     isNewForm: function () {
       return !this.id;
     },
-    method: function () {
-      return this.isNewForm ? "post" : "patch";
-    },
-    submitURL: function () {
-      if (Vue.ff.config.jsonserver) {
-        return this.baseURL + "/" + (this.isNewForm ? "" : this.id);
-      }
-
-      const myURL = new URL(Vue.ff.config.baseURL);
-      myURL.pathname = join(
-        Vue.ff.config.database,
-        this.entityName,
-        this.isNewForm ? "" : this.id
-      );
-
-      return myURL.toString();
-    },
     schema: function () {
       return Vue.getForm(this.entityName);
-    },
-    getURL: function () {
-      if (this.isNewForm) return undefined;
-
-      if (Vue.ff.config.jsonserver) {
-        return this.baseURL + "/" + (this.isNewForm ? "" : this.id);
-      }
-
-      const myURL = new URL(Vue.ff.config.baseURL);
-      myURL.pathname = join(Vue.ff.config.database, this.entityName, this.id);
-
-      return myURL.toString();
     },
   },
   methods: {
@@ -324,7 +289,11 @@ export default {
     submit: function () {
       if (!this.isValid) return;
 
-      axios[this.method](this.submitURL, this.content)
+      const submitPromise = this.isNewForm
+        ? this.ff_create(this.entityName, this.content)
+        : this.ff_update(this.entityName, this.id, this.content);
+
+      submitPromise
         .then(() => {
           this.showToastSuccess(
             JSON.stringify(this.content),
@@ -339,11 +308,10 @@ export default {
           );
         });
     },
-    async getDataList() {
-      const res = await axios
+    getDataList: function () {
+      return axios
         .get(this.url)
         .then((response) => (this.dataList = response.data));
-      this.dataForm = res.data;
     },
     changeContent: function () {
       let copy;
@@ -356,30 +324,24 @@ export default {
         this.loading = false;
         this.$forceUpdate();
       } else {
-        this.getOriginal().catch((err) => {
-          console.error(err);
-          this.showToastDanger(
-            err.message,
-            "Error : The form could not get the original value"
-          );
-          this.$forceUpdate();
-        });
+        this.getOriginal()
+          .catch((err) => {
+            console.error(err);
+            this.showToastDanger(
+              err.message,
+              "Error : The form could not get the original value"
+            );
+          })
+          .finally(() => {
+            this.$forceUpdate();
+          });
       }
     },
     getOriginal: function () {
-      const getURL = this.getURL;
-      if (!getURL) {
-        this.loading = false;
-        this.alert = {
-          variant: "danger",
-          message: "Error while charging original, no get URL",
-          show: true,
-        };
-        return Promise.reject(new Error(this.alert.message));
-      }
-      return axios
-        .get(getURL)
+      return this.ff_read(this.entityName, this.id)
         .then((res) => {
+          if (typeof res !== "object") return Promise.reject(res.data);
+
           let data = res.data;
           console.log(data);
           Vue.set(this, "content", data);
@@ -399,7 +361,7 @@ export default {
         });
     },
   },
-  created: function () {
+  mounted: function () {
     this.changeContent();
   },
   watch: {
@@ -419,8 +381,6 @@ export default {
     title: {
       handler: function () {
         //changement de page de formulaire
-        this.content = this.$props.original;
-        this.url = this.$props.baseURL;
         this.clear();
         this.getDataList();
         this.showAlert = false;
