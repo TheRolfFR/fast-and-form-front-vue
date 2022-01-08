@@ -21,10 +21,6 @@ export default {
   data: function () {
     return {
       users: {
-        original: {
-          username: "",
-          type: "",
-        },
         byDefault: {
           username: "",
           type: ["Contributor"],
@@ -34,15 +30,9 @@ export default {
       contributions: {
         byDefault: {
           res: "",
-          date: new Date().getTime(),
+          date: "today",
           TextureID: "",
           contributors: [],
-        },
-        original: {
-          res: "c32",
-          date: new Date("1999-10-22").getTime(),
-          TextureID: 2,
-          contributors: ["230151512451"],
         },
         baseURL: "http://localhost:3004/Form_contributions",
       },
@@ -57,12 +47,6 @@ export default {
     },
     baseURL: function () {
       return this.entityData.baseURL;
-    },
-    original: function () {
-      return this.entityData.original;
-    },
-    value: function () {
-      return this.entityData.original;
     },
     byDefault: function () {
       return this.entityData.byDefault;

@@ -17,6 +17,7 @@
     "date": {
       "displayName": "Date",
       "type": "date",
+      "format":"timestamp",
       "rules": [{
         "id": "pastDate",
         "type": "date",

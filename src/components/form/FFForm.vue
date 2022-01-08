@@ -148,6 +148,37 @@ export default {
     model: function () {
       return 1;
     },
+    finalByDefault: function () {
+      const entity = Vue.getEntity(this.entityName);
+
+      let copy = cloneDeep(this.byDefault);
+
+      let prop, val;
+      Object.keys(copy).forEach((property) => {
+        prop = entity.properties[property];
+
+        // happens with id for example
+        if (prop === undefined) return;
+
+        val = copy[property];
+
+        if (prop.type === "date" && val === "today") {
+          copy[property] = new Date();
+
+          if (prop.format === "timestamp") {
+            copy[property] = copy[property].getTime();
+          } else if (prop.format === "unix") {
+            copy[property] = copy[property].getTime() / 1000;
+          } else if (prop.format === "utc") {
+            copy[property] = copy[property].toUTCString();
+          } else if (prop.format === "iso") {
+            copy[property] = copy[property].toISOString();
+          }
+        }
+      });
+
+      return copy;
+    },
     finalSchema: function () {
       let result = this.schema;
       result.fields = this.toArr(result.fields);
@@ -219,7 +250,7 @@ export default {
     clear: function () {
       let copy = cloneDeep(this.content);
       for (let x in copy) {
-        copy[x] = this.byDefault[x];
+        copy[x] = this.finalByDefault[x];
       }
       Vue.set(this, "content", copy);
     },
@@ -285,7 +316,7 @@ export default {
       let copy;
       // if I have no ID it means it is a new entry so put default value
       if (this.id === undefined) {
-        copy = cloneDeep(this.byDefault);
+        copy = cloneDeep(this.finalByDefault);
         Vue.set(this, "content", copy);
         Vue.set(this, "original", copy);
 
