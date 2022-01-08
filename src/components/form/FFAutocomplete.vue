@@ -108,7 +108,10 @@ export default {
             ? opt[this.schemaTweaked["options-value"]]
             : opt;
 
-        return this.value.indexOf(compared) === -1;
+        // Fixes bug if value is undefined or not an array
+        return this.value && Array.isArray(this.value)
+          ? this.value.indexOf(compared) === -1
+          : true;
       });
 
       // get searched term
