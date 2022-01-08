@@ -3,6 +3,7 @@
     v-bind="$props"
     @change="onSearchChanged"
     :loadingSearch="loadingSearch"
+    @validated="onValidate"
   />
 </template>
 
@@ -60,6 +61,9 @@ export default {
         .finally(() => {
           this.loadingSearch = false;
         });
+    },
+    onValidate: function (...args) {
+      this.$emit("validated", args[0], args[1], args[2]);
     },
   },
 };

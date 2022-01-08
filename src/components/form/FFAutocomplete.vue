@@ -159,6 +159,7 @@ export default {
       }
 
       if (!valid) this.value = o;
+      this.$emit("input", this.value);
     },
     search: function (n) {
       this.$emit("change", n, this.schemaTweaked["options-value"]);
