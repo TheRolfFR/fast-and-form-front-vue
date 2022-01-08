@@ -3,7 +3,6 @@
   <div>
     <h2>{{ "Edit/Add " + $route.params.entity }}</h2>
     <FFForm
-      :byDefault="byDefault"
       :entityName="entityName"
       :baseURL="baseURL"
       :id="$route.params.id"
@@ -19,19 +18,9 @@ export default {
   data: function () {
     return {
       users: {
-        byDefault: {
-          username: "",
-          type: ["Contributor"],
-        },
         baseURL: "http://localhost:3004/Form_users",
       },
       contributions: {
-        byDefault: {
-          res: "",
-          date: "today",
-          TextureID: "",
-          contributors: [],
-        },
         baseURL: "http://localhost:3004/Form_contributions",
       },
     };
@@ -45,9 +34,6 @@ export default {
     },
     baseURL: function () {
       return this.entityData.baseURL;
-    },
-    byDefault: function () {
-      return this.entityData.byDefault;
     },
     entityData: function () {
       return this.$data[this.entityName];

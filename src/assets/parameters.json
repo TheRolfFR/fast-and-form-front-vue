@@ -29,7 +29,11 @@
           "min": 2,
           "validator": "array"
         }
-      ]
+      ],
+      "byDefault": {
+        "username": "",
+        "type": ["Contributor"]
+      }
     },
     "contributions": {
       "fields": [
@@ -75,7 +79,13 @@
           ],
           "min": 1
         }
-      ]
+      ],
+      "byDefault": {
+        "res": "",
+        "date": "today",
+        "TextureID": "",
+        "contributors": []
+      }
     }
   }
 }

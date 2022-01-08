@@ -93,9 +93,6 @@ export default {
     id: {
       required: true,
     },
-    byDefault: {
-      required: false,
-    },
     baseURL: {
       required: true,
     },
@@ -146,6 +143,9 @@ export default {
   computed: {
     model: function () {
       return 1;
+    },
+    byDefault: function () {
+      return this.schema.byDefault;
     },
     finalByDefault: function () {
       const entity = Vue.getEntity(this.entityName);
