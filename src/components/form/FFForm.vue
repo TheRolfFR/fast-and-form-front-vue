@@ -91,7 +91,10 @@ export default {
   name: "ff-form",
   props: {
     id: {
-      required: true,
+      required: false,
+      default: function () {
+        return undefined;
+      },
     },
     baseURL: {
       required: true,
