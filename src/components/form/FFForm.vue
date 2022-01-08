@@ -285,7 +285,9 @@ export default {
       let result = [];
       // fix select required tag
       if (field.required) {
-        result = this.append(result, validators.required);
+        if (field.type !== "input") {
+          result = this.append(result, validators.required);
+        }
         if (field.type.toLowerCase() === "datepicker") {
           result = this.append(result, validators.date);
         } else if (field.type.toLowerCase() === "checklist") {
