@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <div>
     <h2>{{ "Edit/Add " + entityName }}</h2>
@@ -11,11 +10,9 @@ import FFForm from "../components/form/FFForm.vue";
 
 export default {
   name: "app-list",
+  components: { FFForm },
   data: function () {
     return {};
-  },
-  components: {
-    FFForm,
   },
   computed: {
     id: function () {

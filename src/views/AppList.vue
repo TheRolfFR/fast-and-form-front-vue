@@ -16,9 +16,7 @@ import FFList from "../components/list/FFList.vue";
 
 export default {
   name: "app-list",
-  components: {
-    FFList,
-  },
+  components: { FFList },
   computed: {
     entityName: function () {
       const entityName =
@@ -38,13 +36,6 @@ export default {
   methods: {
     switchEditMode: function () {
       Vue.ff.config.edit = !Vue.ff.config.edit;
-    },
-  },
-  watch: {
-    $route(to, from) {
-      to;
-      from;
-      // console.log(to, from);
     },
   },
 };

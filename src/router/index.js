@@ -1,9 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import TestDB from "../views/TestDB.vue";
 import AppList from "../views/AppList.vue";
 import AppForm from "../views/AppForm.vue";
-import TestFormGenerator from "../components/TestFormGenerator.vue";
+import AppNotFound from "../views/AppNotFound.vue";
 import BootstrapVue from "bootstrap-vue";
 
 Vue.use(VueRouter);
@@ -19,11 +18,6 @@ const routes = [
     redirect: "/list/users",
   },
   {
-    path: "/testdb",
-    name: "Test DB",
-    component: TestDB,
-  },
-  {
     path: "/form/:entity/:id?",
     name: "Edit/Add",
     component: AppForm,
@@ -34,9 +28,8 @@ const routes = [
     component: AppList,
   },
   {
-    path: "/testformgenerator",
-    name: "TestFormGenerator",
-    component: TestFormGenerator,
+    path: "*",
+    component: AppNotFound,
   },
 ];
 
