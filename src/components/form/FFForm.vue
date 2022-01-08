@@ -192,8 +192,8 @@ export default {
       let group;
       for (let i = 0; i < result.groups.length; ++i) {
         group = result.groups[i];
-        for (let j = 0; j < result.length; ++j) {
-          result.fields[i] = this.addValidator(result.fields[j]);
+        for (let j = 0; j < group.length; ++j) {
+          group.fields[j] = this.addValidator(group.fields[j]);
         }
         result.groups[i] = group;
       }
