@@ -38,7 +38,6 @@
 
 <script>
 import Vue from "vue";
-import { join } from "path";
 
 import FFListFilterZone from "./FFListFilterZone.vue";
 import FFListColumnsDisplayed from "./FFListColumnsDisplayed.vue";
@@ -47,11 +46,11 @@ import FFTable from "./table/FFTable.vue";
 import FFListEntryActions from "./FFListEntryActions.vue";
 import FFListDataExport from "./FFListDataExport.vue";
 import FFListDataImport from "./FFListDataImport.vue";
-import axios from "axios";
 import ToastMixin from "../../mixins/ToastMixin";
+import CRUDMixin from "../../mixins/CRUDMixin";
 
 export default {
-  mixins: [ToastMixin],
+  mixins: [ToastMixin, CRUDMixin],
   components: {
     FFListDataExport,
     FFListDataImport,
@@ -63,17 +62,9 @@ export default {
   },
   name: "FFList",
   props: {
-    baseURL: {
-      required: true,
-      type: String,
-    },
     newEntryURL: {
       required: true,
       type: String,
-    },
-    entity: {
-      required: true,
-      type: Object,
     },
     entityName: {
       required: true,
@@ -90,24 +81,11 @@ export default {
     };
   },
   computed: {
-    encodedGetParameters: function () {
-      return encodeURI(
-        `?columns=${JSON.stringify(this.columns)}&filters=${JSON.stringify(
-          this.filters
-        )}`
-      );
+    entity: function () {
+      return Vue.getEntity(this.entityName);
     },
     edit: function () {
       return Vue.ff.config.edit;
-    },
-    readURL: function () {
-      if (Vue.ff.config.jsonserver) {
-        return this.baseURL + this.encodedGetParameters;
-      }
-      const myURL = new URL(Vue.ff.config.baseURL);
-      myURL.pathname = join(Vue.ff.config.database, this.entityName);
-
-      return myURL.toString() + this.encodedGetParameters;
     },
   },
   created: function () {
@@ -124,8 +102,12 @@ export default {
     },
     read: function () {
       this.loading = true;
-      return axios
-        .get(this.readURL)
+      return this.ff_read(
+        this.entityName,
+        undefined,
+        this.columns,
+        this.filters
+      )
         .then((res) => {
           const json = res.data;
 

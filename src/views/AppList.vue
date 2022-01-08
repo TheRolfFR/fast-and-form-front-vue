@@ -6,12 +6,7 @@
         <span> {{ (edit ? "Edit" : "Read") + " mode" }}</span>
       </button>
     </div>
-    <FFList
-      :baseURL="baseURL"
-      :newEntryURL="'/#/form/' + entityName"
-      :entity="entity"
-      :entityName="entityName"
-    />
+    <FFList :newEntryURL="'/#/form/' + entityName" :entityName="entityName" />
   </div>
 </template>
 
@@ -33,30 +28,12 @@ export default {
       if (entityName === undefined) throw new Error("No entity name given");
       return entityName;
     },
-    entity: function () {
-      const entityName = this.entityName;
-      if (this.entities[entityName] === undefined)
-        throw new Error("No entity given");
-      return this.entities[entityName] || {};
-    },
-    baseURL: function () {
-      return (
-        this.host + ":" + String(this.port) + "/" + "Form_" + this.entityName
-      );
-    },
     edit: function () {
       return Vue.ff.config.edit;
     },
   },
   data: function () {
-    return {
-      host: "http://localhost",
-      port: 3004,
-      entities: {
-        users: require("../assets/entity_user.json"),
-        contributions: require("../assets/entity_contribution.json"),
-      },
-    };
+    return {};
   },
   methods: {
     switchEditMode: function () {
