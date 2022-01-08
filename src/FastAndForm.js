@@ -90,6 +90,34 @@ const ffVue = {
       return this.ff.data.entities[name];
     };
 
+    // add methods
+    /**
+     * Form setter
+     * @param {String} name Form name
+     * @param {Object} form Form object
+     */
+    Vue.loadForm = function (name, form) {
+      if (!name && !form) return; // if non true, it's a safe return
+
+      // else throw error if missing
+      if (!name && form.name) name = form.name;
+      if (!name) throw new Error("No name provided, got " + name);
+      if (!form) throw new Error("No object provided for " + name);
+
+      this.ff.data.forms[name] = form;
+    };
+
+    /**
+     * Form getter
+     * @param {String} name Form name searched
+     * @returns Given Form
+     */
+    Vue.getForm = function (name) {
+      if (!this.ff.data.forms[name])
+        throw new Error("No form found for " + name);
+      return this.ff.data.forms[name];
+    };
+
     /**
      *
      * @param {Object} parameters Parameters object
@@ -100,6 +128,12 @@ const ffVue = {
         keys = Object.keys(parameters.entities);
         keys.forEach((k) => {
           Vue.loadEntity(k, parameters.entities[k]);
+        });
+      }
+      if (parameters.forms) {
+        keys = Object.keys(parameters.forms);
+        keys.forEach((k) => {
+          Vue.loadForm(k, parameters.forms[k]);
         });
       }
     };

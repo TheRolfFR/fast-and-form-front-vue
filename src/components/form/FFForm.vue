@@ -66,8 +66,11 @@
 
 <script>
 import ToastMixin from "../../mixins/ToastMixin"; // mixin to show toasts for error for example
-
 import Vue from "vue";
+import VueFormGenerator from "vue-form-generator";
+
+Vue.use(VueFormGenerator);
+
 import { join } from "path";
 
 import FFDatePicker from "./FFDatePicker.vue";
@@ -89,10 +92,6 @@ export default {
   props: {
     id: {
       required: true,
-    },
-    schema: {
-      required: true,
-      type: Object,
     },
     byDefault: {
       required: false,
@@ -180,7 +179,7 @@ export default {
       return copy;
     },
     finalSchema: function () {
-      let result = this.schema;
+      let result = cloneDeep(this.schema);
       result.fields = this.toArr(result.fields);
 
       for (let i = 0; i < result.fields.length; ++i) {
@@ -219,6 +218,9 @@ export default {
       );
 
       return myURL.toString();
+    },
+    schema: function () {
+      return Vue.getForm(this.entityName);
     },
     getURL: function () {
       if (this.isNewForm) return undefined;
@@ -277,15 +279,41 @@ export default {
       return arr;
     },
     addValidator(field) {
+      let result = [];
       // fix select required tag
       if (field.required) {
-        field.validator = this.append(field.validator, validators.required);
-        if (field.type === "datePicker" || field.type === "DatePicker") {
-          field.validator = this.append(field.validator, validators.date);
-        } else if (field.type === "Checklist") {
-          field.validator = this.append(field.validator, validators.array);
+        result = this.append(result, validators.required);
+        if (field.type.toLowerCase() === "datepicker") {
+          result = this.append(result, validators.date);
+        } else if (field.type.toLowerCase() === "checklist") {
+          result = this.append(result, validators.array);
         }
       }
+
+      // validators are stored as strings
+
+      if (field.validator) {
+        if (typeof field.validator === "string") {
+          const vfg_validator = VueFormGenerator.validators[field.validator];
+          if (vfg_validator) result = this.append(result, vfg_validator);
+        } else {
+          result = this.append(result, field.validator);
+        }
+
+        if (Array.isArray(field.validator)) {
+          field.validator.forEach((validator) => {
+            if (typeof validator === "string") {
+              const vfg_validator = VueFormGenerator.validators[validator];
+              if (vfg_validator) result = this.append(result, vfg_validator);
+            } else {
+              result = this.append(result, validator);
+            }
+          });
+        }
+      }
+
+      // apply validator
+      field.validator = result;
       return field;
     },
     submit: function () {

@@ -19,6 +19,7 @@ Vue.use(FastAndForm, {
     users: require("./assets/entity_user.json"),
     contributions: require("./assets/entity_contribution.json"),
   },
+  parameters: [require("./assets/parameters.json")],
 });
 
 Vue.config.productionTip = false;
