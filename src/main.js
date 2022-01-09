@@ -15,10 +15,6 @@ Vue.use(FastAndForm, {
   dark: localStorage.getItem(THEME_KEY, false) === "true",
   baseURL: "http://localhost:3004/Form_",
   edit: true,
-  entities: {
-    users: require("./assets/entity_user.json"),
-    contributions: require("./assets/entity_contribution.json"),
-  },
   parameters: [require("./assets/parameters.json")],
 });
 
