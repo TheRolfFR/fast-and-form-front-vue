@@ -196,18 +196,21 @@ export default {
   padding: 0;
   box-shadow: none;
   background: transparent;
-}
-.ff-autocomplete .b-form-tag > button.b-form-tag-remove {
-  padding: 0;
-  opacity: 1;
-  border: 0px none;
-  background: transparent;
-}
-.ff-autocomplete .ff-autocomplete-container {
-  position: relative;
-  max-height: 150px;
-  overflow: auto;
-  z-index: 100;
-  margin-top: 0.75rem;
+
+  & .b-form-tag > button.b-form-tag-remove {
+    padding: 0;
+    opacity: 1;
+    border: 0px none;
+    text-shadow: unset;
+    color: inherit !important;
+    background: transparent;
+  }
+  & .ff-autocomplete-container {
+    position: relative;
+    max-height: 150px;
+    overflow: auto;
+    z-index: 100;
+    margin-top: 0.75rem;
+  }
 }
 </style>

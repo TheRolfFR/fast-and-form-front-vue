@@ -3,6 +3,7 @@ import merge from "deepmerge";
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import "vue-form-generator/dist/vfg-core.css"; // optional core css additions
 
 // import components
 import FFList from "./components/list/FFList.vue";

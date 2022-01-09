@@ -1,5 +1,6 @@
 <template>
   <b-form-datepicker
+    class="ff-date-picker"
     v-model="rawModel"
     :disabled="disabled"
     today-button
@@ -107,3 +108,19 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.ff-date-picker.form-control {
+  position: relative;
+  padding: 0;
+
+  & > button.btn {
+    position: absolute;
+    height: 33px !important;
+  }
+
+  & > label {
+    margin-left: 41px !important;
+  }
+}
+</style>
