@@ -99,6 +99,10 @@ export default {
       required: true,
       type: String,
     },
+    formName: {
+      required: true,
+      type: String,
+    },
     cancelButton: {
       required: false,
       type: Boolean,
@@ -200,7 +204,7 @@ export default {
       return !this.id;
     },
     schema: function () {
-      return Vue.getForm(this.entityName);
+      return Vue.getForm(this.formName);
     },
   },
   methods: {
