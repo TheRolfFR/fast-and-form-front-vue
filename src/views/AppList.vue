@@ -6,7 +6,10 @@
         <span> {{ (edit ? "Edit" : "Read") + " mode" }}</span>
       </button>
     </div>
-    <FFList :newEntryURL="'/#/form/' + entityName" :entityName="entityName" />
+    <FFList
+      :newEntryURL="'/#/form/' + this.$route.params.entity"
+      :entityName="this.$route.params.entity"
+    />
   </div>
 </template>
 
@@ -18,20 +21,9 @@ export default {
   name: "app-list",
   components: { FFList },
   computed: {
-    entityName: function () {
-      const entityName =
-        this.$route && this.$route.params
-          ? this.$route.params.entity
-          : undefined;
-      if (entityName === undefined) throw new Error("No entity name given");
-      return entityName;
-    },
     edit: function () {
       return Vue.ff.config.edit;
     },
-  },
-  data: function () {
-    return {};
   },
   methods: {
     switchEditMode: function () {
